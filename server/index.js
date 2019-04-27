@@ -4,6 +4,7 @@ import path from 'path';
 // import config from '../webpack.config.dev.js';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import * as ContractActions from './contract';
 
 var app = express();
 //add code to initialize compiler

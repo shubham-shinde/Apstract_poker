@@ -1,0 +1,601 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    "version": "eosio::abi/1.1",
+    "types": [],
+    "structs": [
+        {
+            "name": "actionallin",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "playerId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "handId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "handSeatId",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "actionbet",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "playerId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "handId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "handSeatId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "betValue",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "actioncall",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "playerId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "handId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "handSeatId",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "actionfold",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "playerId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "handId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "handSeatId",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "actionraise",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "playerId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "handId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "handSeatId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "raiseValue",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "addplayer",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "playerId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "playerAccountName",
+                    "type": "name"
+                },
+                {
+                    "name": "buyIn",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "card",
+            "base": "",
+            "fields": [
+                {
+                    "name": "rank",
+                    "type": "uint64"
+                },
+                {
+                    "name": "suit",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "cardpair",
+            "base": "",
+            "fields": [
+                {
+                    "name": "firstCard",
+                    "type": "card"
+                },
+                {
+                    "name": "secondCard",
+                    "type": "card"
+                }
+            ]
+        },
+        {
+            "name": "creategame",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "gameId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "maxPlayers",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "dealcards",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "handId",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "game",
+            "base": "",
+            "fields": [
+                {
+                    "name": "gameId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "maxPlayers",
+                    "type": "uint64"
+                },
+                {
+                    "name": "tablePlayersCount",
+                    "type": "uint64"
+                },
+                {
+                    "name": "currentHandIndex",
+                    "type": "uint64"
+                },
+                {
+                    "name": "dealeratStart",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "hand",
+            "base": "",
+            "fields": [
+                {
+                    "name": "handId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "dealerPosition",
+                    "type": "uint64"
+                },
+                {
+                    "name": "bigBlind",
+                    "type": "uint64"
+                },
+                {
+                    "name": "raisedBy",
+                    "type": "uint64"
+                },
+                {
+                    "name": "currentBetAmount",
+                    "type": "uint64"
+                },
+                {
+                    "name": "flop",
+                    "type": "card[]"
+                },
+                {
+                    "name": "turn",
+                    "type": "card"
+                },
+                {
+                    "name": "river",
+                    "type": "card"
+                },
+                {
+                    "name": "pot",
+                    "type": "uint64"
+                },
+                {
+                    "name": "currentPlayer",
+                    "type": "uint64"
+                },
+                {
+                    "name": "playersOnTable",
+                    "type": "uint64[]"
+                },
+                {
+                    "name": "playersInHand",
+                    "type": "uint64[]"
+                },
+                {
+                    "name": "playersBetAmount",
+                    "type": "uint64[]"
+                },
+                {
+                    "name": "shuffledDeck",
+                    "type": "card[]"
+                },
+                {
+                    "name": "handStrengths",
+                    "type": "uint64[]"
+                }
+            ]
+        },
+        {
+            "name": "openflop",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "handId",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "openriver",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "handId",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "openturn",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "handId",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "players",
+            "base": "",
+            "fields": [
+                {
+                    "name": "playerId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "accountName",
+                    "type": "name"
+                },
+                {
+                    "name": "playerStatus",
+                    "type": "uint8"
+                },
+                {
+                    "name": "seatPosition",
+                    "type": "uint64"
+                },
+                {
+                    "name": "currentChips",
+                    "type": "uint64"
+                },
+                {
+                    "name": "totalBuyIns",
+                    "type": "uint64"
+                },
+                {
+                    "name": "holeCards",
+                    "type": "cardpair"
+                }
+            ]
+        },
+        {
+            "name": "rmplayer",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "playerId",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "seatplayer",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "playerId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "seatPosition",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "showdown",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "handId",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "startgame",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "smallBlind",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "starthand",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "dealerPosition",
+                    "type": "uint64"
+                },
+                {
+                    "name": "currentPlayer",
+                    "type": "uint64"
+                },
+                {
+                    "name": "smallBlind",
+                    "type": "uint64"
+                },
+                {
+                    "name": "playersOnTable",
+                    "type": "uint64[]"
+                },
+                {
+                    "name": "playersInHand",
+                    "type": "uint64[]"
+                }
+            ]
+        },
+        {
+            "name": "updcurpl",
+            "base": "",
+            "fields": [
+                {
+                    "name": "s",
+                    "type": "name"
+                },
+                {
+                    "name": "handId",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "version",
+            "base": "",
+            "fields": []
+        }
+    ],
+    "actions": [
+        {
+            "name": "actionallin",
+            "type": "actionallin",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "actionbet",
+            "type": "actionbet",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "actioncall",
+            "type": "actioncall",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "actionfold",
+            "type": "actionfold",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "actionraise",
+            "type": "actionraise",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "addplayer",
+            "type": "addplayer",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "creategame",
+            "type": "creategame",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "dealcards",
+            "type": "dealcards",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "openflop",
+            "type": "openflop",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "openriver",
+            "type": "openriver",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "openturn",
+            "type": "openturn",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "rmplayer",
+            "type": "rmplayer",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "seatplayer",
+            "type": "seatplayer",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "showdown",
+            "type": "showdown",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "startgame",
+            "type": "startgame",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "starthand",
+            "type": "starthand",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "updcurpl",
+            "type": "updcurpl",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "version",
+            "type": "version",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "game",
+            "type": "game",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "hand",
+            "type": "hand",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "players",
+            "type": "players",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "variants": []
+}
