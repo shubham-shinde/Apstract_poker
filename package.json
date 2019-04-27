@@ -5,9 +5,9 @@
   "main": "index.js",
   "author": "shubham shinde",
   "license": "shubham shinde",
+  "build": "webpack -p",
+  "dev": "webpack-dev-server --hot --inline --host 0.0.0.0 --port 3000",
   "scripts": {
-    // "build": "webpack -p",
-    // "dev": "webpack-dev-server --hot --inline --host 0.0.0.0 --port 3000",
     "live": "babel-node server/index.js",
     "server": "nodemon server/index.js --exec babel-node"
   },

@@ -22,7 +22,7 @@ app.use(express.static(path.resolve(__dirname,'..','dist')));
 // parse application/json
 app.use(bodyParser.json())
 
-const port = 3002;
+const port = 3000;
 
 //eslint-disable-next-line no-console
 const server = app.listen(port, () => console.log('listening on port '+ port));
