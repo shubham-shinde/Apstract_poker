@@ -28,7 +28,7 @@ const port = 3002;
 const server = app.listen(port, () => console.log('listening on port '+ port));
 
 app.get('/', (req, res) => {
-    fun();
+    // fun();
     res.sendFile(path.resolve(__dirname,'..','dist','index.html'))
 
 })
@@ -56,18 +56,23 @@ io.on('connection', (socket) => {
     //TODO if player already exist in player table then make it active
     //TODO if player email is invalid don't let if play but give current game state
     socket.on('addPlayer', ({email, name, pic}, gameState) => {
-        players.push({
-            email,
-            socket: socket.id,
-            seatNo: 1,
-            money: 3000,
-            pic: pic,
-            name: name,
-            playing: false,
-        });
+        
+        validatePlayer(email, function(result) {
+            players.push({
+                email,
+                socket: socket.id,
+                seatNo: 1,
+                money: 3000,
+                pic: pic,
+                name: name,
+                playing: false,
+            });
+        }, function(fail) {
+
+        })
         // gameState is callback function to give client current game state
-        gameState(players);
-        console.log(players.length);
+        // gameState(players);
+        // console.log(players.length);
     })
 
     socket.on('message',(message) => {
