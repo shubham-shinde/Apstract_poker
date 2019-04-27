@@ -9,6 +9,10 @@ var app = express();
 //add code to initialize compiler
 // const compiler = webpack(config); 
 
+function fun() {
+    console.log('fun');
+}
+
 app.use(cors());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -24,7 +28,9 @@ const port = 3000;
 const server = app.listen(port, () => console.log('listening on port '+ port));
 
 app.get('/', (req, res) => {
+    fun();
     res.sendFile(path.resolve(__dirname,'..','dist','index.html'))
+
 })
 
 
