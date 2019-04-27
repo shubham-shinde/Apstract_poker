@@ -9,6 +9,10 @@ var app = express();
 //add code to initialize compiler
 // const compiler = webpack(config); 
 
+function fun() {
+    console.log('fun');
+}
+
 app.use(cors());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -22,7 +26,9 @@ app.use(bodyParser.json())
 const server = app.listen(3000, () => console.log('listening on port 3000'));
 
 app.get('/', (req, res) => {
+    fun();
     res.sendFile(path.resolve(__dirname,'..','dist','index.html'))
+
 })
 
 
@@ -30,13 +36,14 @@ const io = socket(server);
 
 io.on('connection', (socket) => {
     console.log(socket.id);
-    socket.on('name', (name) => {
-        io.emit('name',name);
-    });
-    socket.on('message',(message) => {
-        io.emit('message', message);
-    })
-    socket.on('typing', (name) => {
-        socket.broadcast.emit('typing', name);
-    })
+    // socket.on('name', (name) => {
+    //     io.emit('name',name);
+    // });
+    // socket.on('message',(message) => {
+    //     io.emit('message', message);
+    // })
+    // socket.on('typing', (name) => {
+
+    //     socket.broadcast.emit('typing', name);
+    // })
 })

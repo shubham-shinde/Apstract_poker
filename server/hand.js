@@ -17,6 +17,8 @@ class Hand{
 
 	showFlop(){
 		//getDataFromBC
+		contract.getFlop(this.hand_id);
+		chat.broadcast();
 		currentBet = 0;
 		raisedBy = (dealerPos + 1) % (player_list.length);
 		// display cards
@@ -24,14 +26,21 @@ class Hand{
 
 	showTurn(){
 		//getDataFromBC
+		contract.getTurn(this.hand_id);
+		chat.broadcast();
 	}
 
 	showRiver(){
 		//getDataFromBC
+		contract.getRiver(this.hand_id);
+		chat.broadcast();
 	}
 
 	showdown(){
 		//getDataFromBC
+		contract.showDown(this.hand_id);
+		chat.broadcast();
+		finishHand();
 	}
 
 	finishHand(){
@@ -74,6 +83,7 @@ class Hand{
 	}
 
 	getNextTurn(){
-		//get from blockchain
+		//get currentPlayer from blockchain
+		contract.getCurrentPlayer();
 	}
 };
