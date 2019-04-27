@@ -9,7 +9,7 @@ var ContractConnection = {
 }
 
 export function addPlayer (accountName, playerID, buyIn){
-    return eos.makeAction(ACTOR, KEY, 'addPlayer', {accountName, playerID, buyIn} , ContractConnection)    
+    return eos.makeAction(ACTOR, KEY, 'addplayer', {accountName, playerID, buyIn} , ContractConnection)   
 }
 
 export function rmplayer(playerID){
@@ -17,51 +17,51 @@ export function rmplayer(playerID){
 }
 
 export function seatPlayer(playerID, seatPosition){
-    return eos.makeAction(ACTOR, KEY, 'seatPlayer', {playerID, seatPosition} , ContractConnection)
+    return eos.makeAction(ACTOR, KEY, 'seatplayer', {playerID, seatPosition} , ContractConnection)
 }
 
 export function startGame(smallBlind){
-    return eos.makeAction(ACTOR, KEY, 'startGame', {smallBlind} , ContractConnection)
+    return eos.makeAction(ACTOR, KEY, 'startgame', {smallBlind} , ContractConnection)
 }
 
 export function startHand(){
-    return eos.makeAction(ACTOR, KEY, 'startHand', {} , ContractConnection)
+    return eos.makeAction(ACTOR, KEY, 'starthand', {} , ContractConnection)
 }
 
 export function dealCards(handID){
-    return eos.makeAction(ACTOR, KEY, 'dealCards', {handID} , ContractConnection)
+    return eos.makeAction(ACTOR, KEY, 'dealcards', {handID} , ContractConnection)
 }
 
 export function call(playerID, handID, seatID){
-    return eos.makeAction(ACTOR, KEY, 'call', {playerID, handID, seatID} , ContractConnection)
+    return eos.makeAction(ACTOR, KEY, 'actioncall', {playerID, handID, seatID} , ContractConnection)
 }
 
 export function bet(playerID, handID, seatID, betValue){
-    return eos.makeAction(ACTOR, KEY, 'bet', {playerID, handID, seatID, betValue} , ContractConnection)
+    return eos.makeAction(ACTOR, KEY, 'actionbet', {playerID, handID, seatID, betValue} , ContractConnection)
 }
 
 export function raise(playerID, handID, seatID, raiseValue){
-    return eos.makeAction(ACTOR, KEY, 'raise', {playerID, handID, seatID, raiseValue} , ContractConnection)
+    return eos.makeAction(ACTOR, KEY, 'actionraise', {playerID, handID, seatID, raiseValue} , ContractConnection)
 }
 
 export function allin(playerID, handID, seatID){
-    return eos.makeAction(ACTOR, KEY, 'allin', {playerID, handID, seatID} , ContractConnection)
+    return eos.makeAction(ACTOR, KEY, 'actionallin', {playerID, handID, seatID} , ContractConnection)
 }
 
 export function fold(playerID, handID, seatID){
-    return eos.makeAction(ACTOR, KEY, 'fold', {playerID, handID, seatID} , ContractConnection)
+    return eos.makeAction(ACTOR, KEY, 'actionfold', {playerID, handID, seatID} , ContractConnection)
 }
 
 export function getFlop(handID){
-    return eos.makeAction(ACTOR, KEY, 'getFlop', {handID} , ContractConnection)
+    return eos.makeAction(ACTOR, KEY, 'openflop', {handID} , ContractConnection)
 }
 
 export function getTurn(handID){
-    return eos.makeAction(ACTOR, KEY, 'getTurn', {handID} , ContractConnection)
+    return eos.makeAction(ACTOR, KEY, 'openturn', {handID} , ContractConnection)
 }
 
 export function getRiver(handID){
-    return eos.makeAction(ACTOR, KEY, 'getRiver', {handID} , ContractConnection)
+    return eos.makeAction(ACTOR, KEY, 'openriver', {handID} , ContractConnection)
 }
 
 export function showdown(handID){
