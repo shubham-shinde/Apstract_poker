@@ -45,6 +45,15 @@ function inputChangeRaise(value) {
     $('#raise-range').val(RangeValue);
 }
 
+//cards is the array of cardNames(string) ex C-3 D-J
+function showCard(seat, cards) {
+    var id = '#p'+seat
+    cards.forEach((ele, index) => {
+        var ind = index+1;
+        $(id+' .card-'+ind).attr('src', '../assets/Cards/'+ele+'.png');
+    });
+}
+
 
 var socket = io.connect('localhost:3000');
 

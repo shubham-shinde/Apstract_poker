@@ -6,13 +6,14 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import * as ContractActions from './contract';
 
-var app = express();
-//add code to initialize compiler
-// const compiler = webpack(config); 
+// ContractActions.addPlayer('shrey', 2, 1000).then(data => {
+//     console.log(data);
+// }).catch(err => {
+//     console.log(err);
+// })
 
-function fun() {
-    console.log('fun');
-}
+
+var app = express()
 
 app.use(cors());
 // parse application/x-www-form-urlencoded
@@ -58,19 +59,19 @@ io.on('connection', (socket) => {
     //TODO if player email is invalid don't let if play but give current game state
     socket.on('addPlayer', ({email, name, pic}, gameState) => {
         
-        validatePlayer(email, function(result) {
-            players.push({
-                email,
-                socket: socket.id,
-                seatNo: 1,
-                money: 3000,
-                pic: pic,
-                name: name,
-                playing: false,
-            });
-        }, function(fail) {
+        // validatePlayer(email, function(result) {
+        //     players.push({
+        //         email,
+        //         socket: socket.id,
+        //         seatNo: 1,
+        //         money: 3000,
+        //         pic: pic,
+        //         name: name,
+        //         playing: false,
+        //     });
+        // }, function(fail) {
 
-        })
+        // })
         // gameState is callback function to give client current game state
         // gameState(players);
         // console.log(players.length);
