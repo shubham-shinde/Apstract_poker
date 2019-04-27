@@ -1,17 +1,18 @@
 class Player{
-	constructor(username, balance, accountName, pvtKey, index, owner){
+	constructor(username, balance, accountName, pvtKey, index, owner, connection, active){
 		this.username = username;
 		this.balance = balance;
 		this.accountName = accountName;
 		this.pvtKey = pvtKey;
 		this.index = index;
 		this.holeCards = [];
-		this.owner = owner;							//true if owner is the user
 		this.currentBet = 0;
+		this.connection = connection;
+		this.active = active;
 	}
 
 	getBalance(){
-		return balance;
+		return this.balance;
 	}
 
 	placeBet(amount){
@@ -41,5 +42,9 @@ class Player{
 
 	showdown(){
 		//read cards
+	}
+
+	sitout(){
+		this.active = false;
 	}
 }
