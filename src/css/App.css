@@ -1,5 +1,5 @@
 body {
-  background: url(./../assets/images/bg.png);
+  background: url(../assets/images/bg.png);
   background-size: cover;
   background-position: center;
   flex-direction: column;

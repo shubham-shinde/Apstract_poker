@@ -8,7 +8,9 @@ module.exports = {
         extensions: ['*' , '.js' , '.jsx' , '.json']
     },
     entry: {
-        app: './src/index.js'
+        app: './src/js/index.js',
+        table: './src/js/main.js'
+        
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -17,8 +19,16 @@ module.exports = {
     plugins: [
             new CleanWebpackPlugin(['dist']),
             new HtmlWebpackPlugin({
-                title: "Environment",
-                template: path.resolve(__dirname, 'src', 'index.html')
+                title: "login",
+                template: path.resolve(__dirname, 'src', 'index.html'),
+                filename: './index.html',
+                chunks: ['app']
+            }),
+            new HtmlWebpackPlugin({
+                title: "table",
+                template: path.resolve(__dirname, 'src','table.html'),
+                filename: './table.html',
+                chunks: ['table']
             })
     ],
     devtool: "source-map",
@@ -27,6 +37,15 @@ module.exports = {
     },
     module: {
         rules:  [
+            {
+                test: /\.(html)$/,
+                use: {
+                    loader: 'html-loader',
+                    options: {
+                        attrs: ['img:src', 'link:href']
+                    }
+                }
+            },
             {
                 test: /(\.js|\.jsx)$/,
                 exclude: /node_modules/,
@@ -41,7 +60,8 @@ module.exports = {
             {
                 test: /\.(png|svg|jpg|gif)$/,
                 use: [
-                    'file-loader'
+                    'file-loader',
+                    // 'url-loader'
                 ]
             },
             {

@@ -18,8 +18,10 @@ app.use(express.static(path.resolve(__dirname,'..','dist')));
 // parse application/json
 app.use(bodyParser.json())
 
+const port = 3000;
+
 //eslint-disable-next-line no-console
-const server = app.listen(3000, () => console.log('listening on port 3000'));
+const server = app.listen(port, () => console.log('listening on port '+ port));
 
 app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname,'..','dist','index.html'))
@@ -28,15 +30,37 @@ app.get('/', (req, res) => {
 
 const io = socket(server);
 
+var players = [];
+var connections = [];
+
 io.on('connection', (socket) => {
     console.log(socket.id);
-    socket.on('name', (name) => {
-        io.emit('name',name);
-    });
+    
+    connections.push(socket);
+    socket.emit('hii', 'data')
+
+    socket.on('addPlayer', ({email, name, pic}) => {
+        console.log('called', fun)
+        players.push({
+            email,
+            socket,
+            money: 3000,
+            pic: pic,
+            name: name,
+            playing: false,
+        });
+        console.log(players.length);
+    })
+
     socket.on('message',(message) => {
         io.emit('message', message);
     })
-    socket.on('typing', (name) => {
-        socket.broadcast.emit('typing', name);
+
+    socket.on('time', (name) => {
+        socket.broadcast.emit('time', name);
+    })
+
+    socket.on('disconnect', () => {
+        console.log('disconnected');
     })
 })
