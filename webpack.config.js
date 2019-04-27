@@ -9,7 +9,7 @@ module.exports = {
     },
     entry: {
         app: './src/js/index.js',
-        table: './src/js/main.js'
+        // table: './src/js/main.js'
         
     },
     output: {
@@ -21,15 +21,15 @@ module.exports = {
             new HtmlWebpackPlugin({
                 title: "login",
                 template: path.resolve(__dirname, 'src', 'index.html'),
-                filename: './index.html',
-                chunks: ['app']
+                // filename: './index.html',
+                // chunks: ['app']
             }),
-            new HtmlWebpackPlugin({
-                title: "table",
-                template: path.resolve(__dirname, 'src','table.html'),
-                filename: './table.html',
-                chunks: ['table']
-            })
+            // new HtmlWebpackPlugin({
+            //     title: "table",
+            //     template: path.resolve(__dirname, 'src','table.html'),
+            //     filename: './table.html',
+            //     chunks: ['table']
+            // })
     ],
     devtool: "source-map",
     devServer: {

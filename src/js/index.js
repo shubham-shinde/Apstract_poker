@@ -1,36 +1,76 @@
-
+// $('#p1').removeClass('d-flex')
+// $('#p1').addClass('d-none')
+// $('#p2>img').attr('src', './assets/Cards_2/_0052_BACK.png')
 import $ from './jquery';
-// import io from 'socket.io-client/dist/socket.io'
-import '../css/bootstrap.css';
-import '../css/dash.css';
-import '../css/index.css';
-import '../css/App.css';
-import '../css/intro.css';
+import io from 'socket.io-client/dist/socket.io'
+// import '../css/bootstrap.css';
+// import '../css/dash.css';
+// import '../css/index.css';
+// import '../css/App.css';
+// import '../css/intro.css';
 
 
-window['onSignIn'] = (googleUser) => {
-// function onSignIn(googleUser) {
-// Useful data for your client-side scripts:
-var profile = googleUser.getBasicProfile();
-    console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-    console.log('Full Name: ' + profile.getName());
-    console.log('Given Name: ' + profile.getGivenName());
-    console.log('Family Name: ' + profile.getFamilyName());
-    console.log("Image URL: " + profile.getImageUrl());
-    console.log("Email: " + profile.getEmail());
+// $(document).ready(() => {
+//     console.log(window.localStorage.getItem('email'));
+//     console.log(window.localStorage.getItem('pic'));
+// })
 
-    // The ID token you need to pass to your backend:
-    var id_token = googleUser.getAuthResponse().id_token;
-    console.log("ID Token: " + id_token);
-
-    setUser(profile.getEmail(), profile.getImageUrl());
+window['addPlayer'] = (seat, name, money) => {
+    var id = '#p'+seat
+    $(id).removeClass('d-none');
+    $(id).addClass('d-flex');
+    $(id+' .user-money').html('$' + money);
+    $(id+' .user-name').html(name);
 }
 
-function setUser(mail, pic) {
-    window.localStorage.setItem('email', mail);
-    window.localStorage.setItem('pic', pic);
-    $('#sign-button').addClass('d-none');
-    $('#goto').removeClass('d-none');
+
+window['removePlayer'] = (seat) => {
+    var id = '#p'+seat
+    $(id).removeClass('d-flex');
+    $(id).addClass('d-none');
 }
 
-console.log('hii');
+window['action'] = (seat, action, money) => {
+    var id = '#p'+seat
+    $(id+' .user-action').removeClass('d-none');
+    $(id+' .user-action').html(action);
+    $(id+' .user-money').html('$' + money);
+}
+
+var call = 120;
+var total = 500
+
+window['sliderChange'] = (value) => {
+    var Raise = call*2;
+    var RaiseInput = Raise + value*(total-Raise)/100
+    RaiseInput = Math.floor(RaiseInput)
+    $('#raise-input').val(RaiseInput)
+}
+
+window['inputChangeRaise'] = (value) => {
+    console.log(value);
+    var Raise = call*2;
+    var RangeValue = 100*(value - Raise)/(total-Raise)
+    $('#raise-range').val(RangeValue);
+}
+
+
+
+// socket ================================================
+
+
+var socket = io.connect(document.URL);
+
+socket.on('connect', () => {
+    socket.emit('addPlayer', {name: 'shubham', pic: 'pic', email: 'email'})
+})
+
+
+setTimeout(() => {
+    
+    socket.emit('addPlayer', {name: 'shubham', pic: 'pic', email: 'email'})
+}, 2000);
+
+socket.on('time', (name) => {
+    console.log(name);    
+})
