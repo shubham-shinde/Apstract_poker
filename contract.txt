@@ -1,0 +1,10 @@
+
+wallet name - eospoker 
+password - PW5KeNnMQ2vD8bH8f2ZMfEVwgbVP5P15589LcF2baxe7NtHzUPP33
+
+jungle account name - eospokergame
+private key for both - 5HzHemUESLjVts2oh8hYPj2ei9vewYa1Zo4CLfZKkYLJZGtLaE6
+active public key - EOS8722R4JYsTRrDrvuW17cmCxgNgGASNeYhgoboZTNUPHLPfo4rm
+owner public key - EOS8722R4JYsTRrDrvuW17cmCxgNgGASNeYhgoboZTNUPHLPfo4rm
+
+jungle endpoint - http://jungle2.cryptolions.io:80

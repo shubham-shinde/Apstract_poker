@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.png" /> -->
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="301742842533-jh7kfo6s2d5bstg0nmc67kg4smea00ma.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <!-- <meta name="theme-color" content="#000000" /> -->
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> -->
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link rel="stylesheet" href="./css/dash.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/App.css">
+    <link rel="stylesheet" href="./css/intro.css">
+    <!-- <link rel="stylesheet" href="./css/fontawesome.css"> -->
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Apstract Poker</title>
+  </head>
+  <body>
+    <div class="text-center text-white">
+        <h2 class="m-4">Welcome to</h2>
+        <h1 class="text-danger font-weight-bold m-4">Paracosmic Poker Game</h1>
+        <a class="d-none" href="./table.html" id='goto'><button class="btn btn-primary">Go to table</button></a>
+    </div>
+    <div id='sign-button' class="g-signin2 m-5" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <script src="./js/jquery.js"></script>
+    <script>
+      function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+
+        setUser(profile.getEmail(), profile.getImageUrl());
+      }
+
+      function setUser(mail, pic) {
+        window.localStorage.setItem('email', mail);
+        window.localStorage.setItem('pic', pic);
+        $('#sign-button').addClass('d-none');
+        $('#goto').removeClass('d-none');
+      }
+    </script>
+  </body>
+</html>

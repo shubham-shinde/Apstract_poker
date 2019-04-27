@@ -4,6 +4,7 @@ import path from 'path';
 // import config from '../webpack.config.dev.js';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import * as ContractActions from './contract';
 
 var app = express();
 //add code to initialize compiler
@@ -22,7 +23,7 @@ app.use(express.static(path.resolve(__dirname,'..','dist')));
 // parse application/json
 app.use(bodyParser.json())
 
-const port = 3002;
+const port = 3000;
 
 //eslint-disable-next-line no-console
 const server = app.listen(port, () => console.log('listening on port '+ port));
