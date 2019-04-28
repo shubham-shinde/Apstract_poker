@@ -6,6 +6,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import * as ContractActions from './contract';
 
+var ChatHandler = require('chat.js');
+
 var app = express();
 //add code to initialize compiler
 // const compiler = webpack(config); 
@@ -44,6 +46,8 @@ app.get('/', (req, res) => {
 
 const io = socket(server);
 
+chatHandler = new ChatHandler(io);
+
 var players = [];
 var connections = [];
 
@@ -59,34 +63,80 @@ io.on('connection', (socket) => {
     socket.on('addPlayer', ({email, name, pic}, gameState) => {
         
         validatePlayer(email, function(result) {
-            players.push({
-                email,
-                socket: socket.id,
-                seatNo: 1,
-                money: 3000,
-                pic: pic,
-                name: name,
-                playing: false,
-            });
+            // players.push({
+            //     email,
+            //     socket: socket.id,
+            //     seatNo: 1,
+            //     money: 3000,
+            //     pic: pic,
+            //     name: name,
+            //     playing: false,
+            // });
+            var p = new Player(result.username, result.balance, result.accountName, result.pvtKey, result.index, socket, true);
+            players.push(p);
         }, function(fail) {
-
+            console.log("No player found");
         })
         // gameState is callback function to give client current game state
         // gameState(players);
         // console.log(players.length);
-    })
+    });
 
-    socket.on('message',(message) => {
-        io.emit('message', message);
-    })
+    socket.on('seatPlayer', ({seatPosition, playerID}, seatPlayer) => {
+
+    });
+
+    socket.on('call', ({playerID, handID}, onCall) => {
+
+    });
+
+    socket.on('bet', ({playerID, handID, betValue}, onBet) => {
+
+    });
+
+    socket.on('raise', ({playerID, handID, raiseValue}, onRaise) => {
+
+    });
+
+    socket.on('fold', ({playerID, handID}, onFold) => {
+
+    });
+    // socket.on('message',(message) => {
+    //     io.emit('message', message);
+    // })
 
 
-    socket.on('time', (name) => {
-        socket.broadcast.emit('time', name);
-    })
+    // socket.on('time', (name) => {
+    //     socket.broadcast.emit('time', name);
+    // })
 
     //TODO Automate players Action on disconnect
     socket.on('disconnect', () => {
-        console.log('disconnected');
+        // console.log('disconnected');
+        chatHandler.remove(socket);
     })
-})
+});
+
+function validateEmail(email, successCallback, failureCallback){
+    // connect to db via mysql
+    // if email isn't validated, throw an error
+    var params = {email}
+    var options = {
+        uri : '',
+        method : 'POST',
+        headers : {
+            'Accept' : 'application/json'
+        },
+        body : params,
+        json = true
+    }
+    request(options, (err, res, body) => {
+        if(err){
+            failureCallback();
+        }
+        else{
+            // if(res.)
+        }
+    })
+        // successCallback(result);
+}

@@ -1,5 +1,5 @@
 class Player{
-	constructor(username, balance, accountName, pvtKey, index, owner, connection, active){
+	constructor(username, balance, accountName, pvtKey, index, connection, active){
 		this.username = username;
 		this.balance = balance;
 		this.accountName = accountName;

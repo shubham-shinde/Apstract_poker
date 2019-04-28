@@ -4,6 +4,7 @@ class ChatHandler{
 	constructor(){
 		this.players = [];
 		this.sockets = [];
+		this.agent = agent;
 	}
 
 	addConnection(playerID, socketID){
@@ -40,6 +41,9 @@ class ChatHandler{
 	}
 
 	emit(){
+		for(var socket in sockets){
+			this.agent.emit("Hello");
+		}
 		//TODO : send data to all sockets using sockets.io
 	}
 }
