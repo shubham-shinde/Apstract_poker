@@ -6,15 +6,22 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import * as ContractActions from './contract';
 
+<<<<<<< HEAD
 var ChatHandler = require('chat.js');
 
 var app = express();
 //add code to initialize compiler
 // const compiler = webpack(config); 
+=======
+// ContractActions.addPlayer('shrey', 2, 1000).then(data => {
+//     console.log(data);
+// }).catch(err => {
+//     console.log(err);
+// })
+>>>>>>> 64a9b44aa8b597e6ede54a8c82f0461a2340764a
 
-function fun() {
-    console.log('fun');
-}
+
+var app = express()
 
 app.use(cors());
 // parse application/x-www-form-urlencoded
@@ -73,10 +80,26 @@ io.on('connection', (socket) => {
             //     playing: false,
             // });
             var p = new Player(result.username, result.balance, result.accountName, result.pvtKey, result.index, socket, true);
+            // players.push(p);
+            
+            gamestate(players);
             players.push(p);
         }, function(fail) {
             console.log("No player found");
         })
+        // validatePlayer(email, function(result) {
+        //     players.push({
+        //         email,
+        //         socket: socket.id,
+        //         seatNo: 1,
+        //         money: 3000,
+        //         pic: pic,
+        //         name: name,
+        //         playing: false,
+        //     });
+        // }, function(fail) {
+
+        // })
         // gameState is callback function to give client current game state
         // gameState(players);
         // console.log(players.length);

@@ -58,6 +58,7 @@ async function getTable(EndPoint, Table, options) {
       "limit": options.limit && options.limit,
       "index_position": "primary",
       "lower_bound": options.lower_bound && options.lower_bound,
+      "index_position": options.index_position && options.index_position,
     });
     // console.log(EndPoint);
     return result.rows;
@@ -73,7 +74,7 @@ class ApiService {
     return takeAction( actor, key, action, parameters, connectToController);
   }
 
-  static async getTableRows(connectToController, table, options = {limit: 500}) {
+  static getTableRows(connectToController, table, options = {limit: 500}) {
     return getTable(connectToController, table, options);
   }
 
