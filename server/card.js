@@ -1,8 +1,8 @@
 class Card{
-	constructor(value, suit, isPublic, address){
+	constructor(value, suit){
 		this.value = value;
 		this.suit = suit;
-		this.public = isPublic;
-		this.address = address;
 	}
 }
+
+module.exports = Card;

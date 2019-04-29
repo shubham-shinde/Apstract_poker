@@ -58,11 +58,15 @@ function showCard(seat, cards) {
 var socket = io.connect('localhost:3000');
 
 socket.on('connect', function () {
-    socket.emit('addPlayer', {name: 'shubham', pic: 'pic', email: 'email'}, (data) => {
+    socket.emit('addPlayer', {name: 'shubham', pic: 'pic', email: 'pandeyshrey33@gmail.com'}, (data) => {
         console.log(data);
     })
 })
 
 socket.on('time', (name) => {
     console.log(name);    
+})
+
+socket.on('message', (msg) => {
+    console.log(msg);
 })

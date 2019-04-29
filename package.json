@@ -35,7 +35,9 @@
   "dependencies": {
     "eosjs": "^20.0.0-beta3",
     "html-loader": "^0.5.5",
+    "mysql": "^2.17.1",
     "node-fetch": "^2.4.1",
+    "nodemon": "^1.18.11",
     "socket.io": "^2.1.0",
     "url-loader": "^1.1.2",
     "webpack": "^4.30.0",

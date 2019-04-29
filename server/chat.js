@@ -1,7 +1,7 @@
 //TODO : Broadcast data to everyone connected
 
 class ChatHandler{
-	constructor(){
+	constructor(agent){
 		this.players = [];
 		this.sockets = [];
 		this.agent = agent;
@@ -48,6 +48,8 @@ class ChatHandler{
 	}
 }
 
+// export default ChatHandler{};
+module.exports = ChatHandler
 // chatHandler = new ChatHandler();
 // chatHandler.addConnection(1, "abcd1");
 // chatHandler.addConnection(2, "abcd2");

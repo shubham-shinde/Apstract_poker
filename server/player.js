@@ -9,6 +9,8 @@ class Player{
 		this.currentBet = 0;
 		this.connection = connection;
 		this.active = active;
+		this.inHand = false;
+		this.seat = -1;
 	}
 
 	getBalance(){
@@ -21,6 +23,10 @@ class Player{
 
 	raise(amount){
 		//send action
+		getFromBlockchain(amount, function(result) {
+			currentBet += result.amount;
+			balance -= result.amount;
+		});
 	}
 
 	check(){
@@ -35,9 +41,15 @@ class Player{
 		// send action
 	}
 
-	getHoleCards(){
+	fold(){
+		this.inHand = false;
+	}
+
+	getHoleCards(card1, card2){
 		// ask my wallet for my cards
 		// display the images
+		this.holeCards.push(card1);
+		this.holeCards.push(card2);
 	}
 
 	showdown(){
@@ -47,4 +59,15 @@ class Player{
 	sitout(){
 		this.active = false;
 	}
+
+	display(){
+		console.log("Username " + this.username + ", Balance " + this.balance);
+	}
+
+	getFromBlockchain(val, successCallback, failureCallback){
+		successCallback({amount : val});
+	}
+
 }
+
+module.exports = Player;
