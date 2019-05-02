@@ -5,6 +5,7 @@ class ChatHandler{
 		this.players = [];
 		this.sockets = [];
 		this.agent = agent;
+		agent.emit('time', 'ChatHandler Initialized');
 	}
 
 	addConnection(playerID, socketID){

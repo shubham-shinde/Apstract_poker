@@ -1,4 +1,5 @@
 import * as contract from './contract';
+import socket from 'socket.io';
 var Hand = require('./hand.js')
 var Player = require('./player.js')
 
@@ -6,7 +7,7 @@ var abcd = -1;
 
 
 class Table{
-	constructor(playersOnTable, smallBlind, minBuyIn, maxBuyIn){
+	constructor(playersOnTable, smallBlind, minBuyIn, maxBuyIn, io){
 		this.playersOnTable = playersOnTable;
 		this.smallBlind = smallBlind;
 		this.minBuyIn = minBuyIn;
@@ -15,8 +16,7 @@ class Table{
 		this.currentBet = 2*smallBlind;
 		this.seats = {0 : -1 , 1 : -1 , 2 : -1 , 3 : -1 , 4 : -1 , 5 : -1 , 6 : -1 , 7 : -1 , 8 : -1};
 		this.currentHand = null; // Read data from contract
-		// var Hand = require('./hand.js')
-		// abcd ++;
+		this.agent = io;
 	}
 
 	addPlayer(player){
@@ -28,18 +28,26 @@ class Table{
 	}
 
 	removePlayer(player){
-		for(var val in player_list){
-
+		for(var key in this.playersOnTable){
+			if(this.playersOnTable[key].username == player.username){
+				this.playersOnTable[key] = -1;
+				return;
+			}
 		}
 	}
 
 	removePlayer(position){
-		
+		if(position > -1 && position < 9){
+			this.playersOnTable[position] = -1;
+			return;
+		}
 	}
 
 	startHand(){
 		//verify if the current hand is over from blockchain
 		// contract.startHand();
+		// this.agent.emit('time', {'handID' : 1, "user" : 2});
+		// console.log(this.agent);
 		var playerList = {0 : -1 , 1 : -1 , 2 : -1 , 3 : -1 , 4 : -1 , 5 : -1 , 6 : -1 , 7 : -1 , 8 : -1};
 		for(var key in this.seats){
 			if(this.seats[key].active){
@@ -51,7 +59,7 @@ class Table{
 		// var p = new Player();
 		//get data from blockchain, including dealer position and people in hand
 		/*Pass data to the constructor to initialize the hand*/
-		this.currentHand = new Hand(0, playerList, 0, 0, null);
+		this.currentHand = new Hand(0, playerList, 0, this.agent, 10);
 		this.currentHand.startHand();
 		// for(var player in this.playersOnTable){
 
@@ -64,6 +72,7 @@ class Table{
 			//verify if this actually happened
 			// playersOnTable.push(playerID);
 			this.seats[seatPosition] = player;
+			player.seatPlayer(seatPosition);
 		}
 		else{
 			return false;
@@ -74,37 +83,5 @@ class Table{
 		// return all the data for the game.
 	}
 }
-
-var player1 = new Player("pandeyshrey33", 3000, "abcde", "xyz", 0, null, true);
-var player2 = new Player("pandeyshrey33", 3000, "abcde", "xyz", 1, null, true);
-var player3 = new Player("pandeyshrey33", 3000, "abcde", "xyz", 2, null, true);
-var player4 = new Player("pandeyshrey33", 3000, "abcde", "xyz", 3, null, true);
-var player5 = new Player("pandeyshrey33", 3000, "abcde", "xyz", 4, null, true);
-var player6 = new Player("pandeyshrey33", 3000, "abcde", "xyz", 5, null, true);
-
-
-// var hand = new Hand(0, );
-var table = new Table([], 10, 2000, 4000);
-
-table.seatPlayer(0, player1);
-table.seatPlayer(1, player2);
-table.seatPlayer(2, player3);
-table.seatPlayer(3, player4);
-table.seatPlayer(4, player5);
-
-for(var key in table.seats){
-	console.log(key, table.seats[key]);
-}
-
-table.startHand();
-
-table.currentHand.assignTurn(3);
-// console.log(table.currentHand.getNextTurn(2));
-
-table.currentHand.fold(player4);
-table.currentHand.fold(player5);
-// table.currentHand.fold(player6);
-
-table.currentHand.display();
 
 module.exports = Table;

@@ -68,6 +68,9 @@ class Player{
 		successCallback({amount : val});
 	}
 
+	seatPlayer(seatPos){
+		this.seat = seatPos;
+	}
 }
 
 module.exports = Player;

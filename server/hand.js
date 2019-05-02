@@ -17,6 +17,8 @@ class Hand{
 		this.river = [];
 		this.playerIndex = -1;
 		this.maxPlayerCount = 8;
+		this.smallBlind = smallBlind;
+		this.turnNumber = 0;
 
 		// for(var key in playersInHand){
 		// 	console.log(key + " : " + playersInHand[key]);
@@ -25,6 +27,7 @@ class Hand{
 
 	startHand(){
 		// getnextPlayer(this.dealerPos);
+
 		for(var key in this.playersInHand){
 			if(this.playersInHand[key] != -1){
 				this.player_list.push(this.playersInHand[key]);
@@ -36,34 +39,32 @@ class Hand{
 			this.player_list[p].getHoleCards(new Card("A", "D"), new Card("A", "C"));
 			// console.log(this.player_list[player]);
 		}
+		this.currentBet = 2*this.smallBlind;
 		this.raisedBy = this.getNextPlayer(this.dealerPos);
-		console.log("Checking raisedBy " + this.raisedBy);
+		this.playersInHand[this.raisedBy].currentBet = this.smallBlind;
+		this.playersInHand[this.raisedBy].balance -= this.smallBlind;
 		this.raisedBy = this.getNextPlayer(this.raisedBy);
+		this.playersInHand[this.raisedBy].currentBet = 2*this.smallBlind;
+		this.playersInHand[this.raisedBy].balance -= 2*this.smallBlind;
 		this.raisedBy = this.getNextPlayer(this.raisedBy);
+		// this.raisedBy = this.getNextPlayer(this.raisedBy);
+		// console.log("Checking smallBlind " + this.raisedBy);
+		this.playerIndex = this.raisedBy;
+
+		this.agent.emit('message', {handID : 1, dealer : this.dealerPos, smallBlind : this.smallBlind, bigBlind : 2*this.smallBlind});
+
 		// this.raisedBy = this.getNextPlayer(this.getNextPlayer(this.getNextPlayer(this.dealerPos)));
 		// assignTurn(3);
 	}
 
 	showFlop(){
+		// console.log("Showing Flop");
 		//getDataFromBC
-		if(this.state != 1) return;
-		// var data = contract.getFlop(this.hand_id);
-		// chat.broadcast();
+		if(this.state != 2) return;
 
-		// var flop = {
-		// 	state : 1,
-		// 	cards : [{data[0].x, data[0].y}, {data[1].x, data[1].y}, {data[2].x, data[2].y}]
-		// }
+		this.agent.emit('message', {card1 : "cA", card2 : 'dA', card3 : 'cT'});
 
-		// agent.broadcast.emit(flop);
 		this.currentBet = 0;
-
-		// playersInHand = player_list;
-		// for(var player in this.playersInHand){
-
-		// }
-		// raisedBy = (dealerPos + 1) % (player_list.length);
-		// display cards
 	}
 
 	showTurn(){
@@ -71,15 +72,17 @@ class Hand{
 		// contract.getTurn(this.hand_id);
 		// agent.broadcast(turn);
 		this.currentBet = 0;
+		this.agent.emit('message', {card : "c2"});
 		// this.playersInHand = player_list;
 		// raisedBy = (dealerPos + 1) % (player_list.length);
 	}
 
 	showRiver(){
 		//getDataFromBC
-		contract.getRiver(this.hand_id);
+		// contract.getRiver(this.hand_id);
 		// agent.broadcast();
-		currentBet = 0;
+		this.currentBet = 0;
+		this.agent.emit('message', {card : "c6"});
 		// playersInHand = player_list;
 		// raisedBy =;
 	}
@@ -88,17 +91,37 @@ class Hand{
 		//getDataFromBC
 		// contract.showDown(this.hand_id);
 		// agent.broadcast();
-		this.finishHand();
+
+		// Example message
+
+		// this.agent.emit('showDown', {{
+		// 		player : [
+		// 			{
+		// 				playerID : 1,
+		// 				seat : 1,
+		// 				card1 : "c7",
+		// 				card2 : 'c9',
+		// 				win : 1000,
+		// 				newBalance : 2300
+		// 			},
+		// 			{
+		// 				playerID : 2,
+		// 				seat : 1,
+		// 				card1 : "c7",
+		// 				card2 : 'c9',
+		// 				win : 1000,
+		// 				newBalance : 2300
+		// 			}
+		// 		]
+		// 	}
+		// });
+		// this.finishHand();
 	}
 
 	finishHand(){
-		console.log("Hand Finished");
+		// console.log("Hand Finished");
+		// this.agent.emit('handfin', "Hand finished");
 	}
-
-	// static startHand(){
-	// 	//send playerList to BC, get dealerPos and all from BC
-	// 	//get handID from BC
-	// }
 
 	getPlayerAtPos(pos){
 		for (var i = 0; i<player_list.length; i++){
@@ -109,18 +132,20 @@ class Hand{
 
 	placeBet(amount, player){
 		//update min raise
+		if(this.playerIndex != player.index) return;
 		if(amount < minRaise) return;
-		pot += amount;
-		player_list.clear();
-		player_list.push(player);
+		this.pot += amount;
+		this.player_list.clear();
+		this.player_list.push(player);
 	}
 
 	raise(amount, player){
 		//update min raise
+		if(this.playerIndex != player.index) return;
 		if(amount < minRaise) return;
-		minRaise = amount - currentBet + amount;
-		currentBet = amount;
-		pot += amount;
+		this.minRaise = amount - currentBet + amount;
+		this.currentBet = amount;
+		this.pot += amount;
 		// for(var keys in playerList){
 
 		// }
@@ -129,14 +154,29 @@ class Hand{
 	}
 
 	call(player){
-		pot += currentBet;
+		if(this.playerIndex != player.index) return;
+		this.pot += this.currentBet - player.currentBet;
+		player.balance -= (this.currentBet - player.currentBet);
+		this.assignTurn(this.getNextPlayer(player.index));
 		// player_list.push(player);
 	}
 
 	fold(player){
+		// console.log(this.playerIndex + " is the player Index " + player.index);
+		console.log("Folding for player " + player.username);
+		if(this.playerIndex != player.index) return;
+		// console.log("Here");
 		player.fold();
+		// this.playersInHand[player.seat] = -1;
 		this.assignTurn(this.getNextPlayer(player.index));
-		console.log(this.raisedBy);
+		// console.log(this.raisedBy);
+	}
+
+	check(player){
+		if(this.playerIndex != player.index) return;
+		if(this.currentBet != player.currentBet) return;
+		console.log("Checked");
+		this.assignTurn(this.getNextPlayer(player.index));
 	}
 
 	winner(player, amount){
@@ -145,6 +185,10 @@ class Hand{
 
 	assignTurn(pos){
 		// return contract.getCurrentTurn();
+		// console.log("Pos : " + pos + " RaisedBy : " + this.raisedBy);
+		console.log("State " + this.state);
+		this.turnNumber += 1;
+		console.log(this.turnNumber + " this.turnNumber");
 		if(pos == this.raisedBy) {
 			var start = pos;
 			// console.log("In HERE");
@@ -159,22 +203,28 @@ class Hand{
 					}
 				}
 			}
-			if(this.state == 0){
-				this.state++;
-				this.showFlop();
-				this.playerIndex = this.getNextPlayer(this.dealerPos);
+			if (this.state == 0){
+				console.log("Assigning Turn: " + pos);
+				this.state ++;
+				this.playerIndex = pos;
 			}
-			else if(this.state == 1){
+			else if (this.state == 1){
 				this.state++;
-				this.showTurn();
+				console.log("Showing flop");
+				this.showFlop();
 				this.playerIndex = this.getNextPlayer(this.dealerPos);
 			}
 			else if (this.state == 2){
 				this.state++;
-				this.showRiver();
+				this.showTurn();
 				this.playerIndex = this.getNextPlayer(this.dealerPos);
 			}
 			else if (this.state == 3){
+				this.state++;
+				this.showRiver();
+				this.playerIndex = this.getNextPlayer(this.dealerPos);
+			}
+			else if (this.state == 4){
 				this.state++;
 				this.showDown();
 				// this.playerIndex = getNextPlayer(this.dealerPos);
@@ -184,18 +234,32 @@ class Hand{
 			console.log("Assigning Turn : " + pos);
 			this.playerIndex = pos;
 		}
+
+		setTimeout(this.autoFold.bind(this), 2000, this.playersInHand[this.playerIndex], this.turnNumber);
+	}
+
+	autoFold(player, turnNumber){
+		console.log("Folding for player " + player.username + " " + turnNumber + " : " + this.turnNumber);
+		if(this.turnNumber == turnNumber){
+			this.fold(player);
+			// console.log("Folding")
+		}
 	}
 
 	getNextPlayer(pos){
-		var start = pos+1;
-		// console.log
+		// console.log("Position : " + pos);
+		var start = (pos+1) % this.maxPlayerCount;
 		while(true){
-			if(this.playersInHand[start].inHand){
+			if(this.playersInHand[start].inHand == true){
 				return start;
 			}
 			else{
+				// console.log("Looking at : " + start);
+				if(start == this.raisedBy) {
+					// this.assignTurn(this.raisedBy);
+					return this.raisedBy;
+				}
 				start = (start + 1) % this.maxPlayerCount;
-				if(start == pos) return pos;
 			}
 		}
 	}
@@ -204,24 +268,12 @@ class Hand{
 		// return contract.getCurrentTurn();
 	}
 
-	// getNextPlayer(currentPos){
-	// 	for(var i = 0; i<playersInHand.length; i++){
-
-	// 	}
-	// }
-
 	display(){
 		for(var key in this.playersInHand){
 			if(this.playersInHand[key] != -1)
-				console.log(key + " : " + this.playersInHand[key].inHand);
+				console.log(key + " : " + this.playersInHand[key].username + " , " + this.playersInHand[key].balance);
 		}
 	}
 };
 
 module.exports = Hand;
-
-// var playerList = {0 : -1 , 1 : -1 , 2 : -1 , 3 : -1 , 4 : -1 , 5 : -1 , 6 : -1 , 7 : -1 , 8 : -1};
-// // var hand = new Hand();
-// for(var keys in playerList){
-// 	console.log(keys + " : " + playerList[keys]);
-// }

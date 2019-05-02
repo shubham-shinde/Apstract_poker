@@ -56,8 +56,11 @@ const io = socket(server);
 
 var chatHandler = new ChatHandler(io);
 
+// console.log(io + " IO");
+
 // var game = new Game();
-var table = new Table([], 100, 20000, 40000);
+var table = new Table([], 100, 20000, 40000, io);
+// table.setSocket(io);
 
 var players = [];
 var connections = [];
@@ -71,6 +74,8 @@ io.on('connection', (socket) => {
 		socket.emit("Hello");
 		res.end();
 	});
+
+	// io.emit('time', 'timeout')
 
 	//TODO if email is valid add player to player table
 	//TODO if player already exist in player table then make it active
@@ -86,6 +91,7 @@ io.on('connection', (socket) => {
 			// players[Where do we assign ID, DB or Contract] = 
 			gameState(players);
 			players.push(p);
+			start();
 		}, function(fail) {
 			console.log("No player found");
 		})
@@ -101,7 +107,7 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('call', ({playerID, handID}, onCall) => {
-		
+		table.currentHand.call(table.playersInHand[table.getPlayerSeat(playerID)]);
 	});
 
 	socket.on('bet', ({playerID, handID, betValue}, onBet) => {
@@ -154,8 +160,38 @@ function validatePlayer(email, successCallback, failureCallback){
 	});
 }
 
-function gameState(players){
-	// console.log(players.length);
-	console.log("Hello");
-	return "hello";
+function start(){
+	var player1 = new Player("1", 3000, "abcde", "xyz", 0, null, true);
+	var player2 = new Player("2", 3000, "abcde", "xyz", 1, null, true);
+	var player3 = new Player("3", 3000, "abcde", "xyz", 2, null, true);
+	var player4 = new Player("4", 3000, "abcde", "xyz", 3, null, true);
+	var player5 = new Player("5", 3000, "abcde", "xyz", 4, null, true);
+	var player6 = new Player("6", 3000, "abcde", "xyz", 5, null, true);
+
+
+	// var hand = new Hand(0, );
+	var table = new Table([], 10, 2000, 4000, io);
+
+	table.seatPlayer(0, player1);
+	table.seatPlayer(1, player2);
+	table.seatPlayer(2, player3);
+	table.seatPlayer(3, player4);
+	table.seatPlayer(4, player5);
+
+	for(var key in table.seats){
+		if(table.seats[key] != -1)
+			console.log(key, table.seats[key]);
+	}
+
+	table.startHand();
+
+	table.currentHand.assignTurn(3);
+
+	table.currentHand.fold(player4);
+	table.currentHand.fold(player5);
+	// table.currentHand.fold(player1);
+	// table.currentHand.call(player2);
+	// table.currentHand.check(player3);
+
+	table.currentHand.display();
 }
