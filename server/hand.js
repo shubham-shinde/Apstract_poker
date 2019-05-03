@@ -19,10 +19,6 @@ class Hand{
 		this.maxPlayerCount = 8;
 		this.smallBlind = smallBlind;
 		this.turnNumber = 0;
-
-		// for(var key in playersInHand){
-		// 	console.log(key + " : " + playersInHand[key]);
-		// }
 	}
 
 	startHand(){
@@ -50,6 +46,7 @@ class Hand{
 		// this.raisedBy = this.getNextPlayer(this.raisedBy);
 		// console.log("Checking smallBlind " + this.raisedBy);
 		this.playerIndex = this.raisedBy;
+		this.pot = 3 * this.smallBlind;
 
 		this.agent.emit('message', {handID : 1, dealer : this.dealerPos, smallBlind : this.smallBlind, bigBlind : 2*this.smallBlind});
 
@@ -63,6 +60,7 @@ class Hand{
 		if(this.state != 2) return;
 
 		this.agent.emit('message', {card1 : "cA", card2 : 'dA', card3 : 'cT'});
+
 
 		this.currentBet = 0;
 	}
@@ -132,8 +130,11 @@ class Hand{
 
 	placeBet(amount, player){
 		//update min raise
-		if(this.playerIndex != player.index) return;
+		if(this.playerIndex != player.seat) return;
 		if(amount < minRaise) return;
+
+		this.agent.emit('raise', {seatID : player.seat, value : amount});
+
 		this.pot += amount;
 		this.player_list.clear();
 		this.player_list.push(player);
@@ -141,42 +142,45 @@ class Hand{
 
 	raise(amount, player){
 		//update min raise
-		if(this.playerIndex != player.index) return;
-		if(amount < minRaise) return;
-		this.minRaise = amount - currentBet + amount;
+		if(this.playerIndex != player.seat) return;
+		if(amount < this.minRaise) return;
+		
+		this.agent.emit('raise', {seatID : player.seat, value : amount});
+		
+		this.minRaise = amount - this.currentBet + amount;
 		this.currentBet = amount;
 		this.pot += amount;
-		// for(var keys in playerList){
-
-		// }
-		// player_list.clear();
-		// player_list.push(player);
 	}
 
 	call(player){
-		if(this.playerIndex != player.index) return;
+		if(this.playerIndex != player.seat) return;
+
+		this.agent.emit('call', {seatID : player.seat});
+		
 		this.pot += this.currentBet - player.currentBet;
 		player.balance -= (this.currentBet - player.currentBet);
-		this.assignTurn(this.getNextPlayer(player.index));
+		this.assignTurn(this.getNextPlayer(player.seat));
 		// player_list.push(player);
 	}
 
 	fold(player){
-		// console.log(this.playerIndex + " is the player Index " + player.index);
-		console.log("Folding for player " + player.username);
-		if(this.playerIndex != player.index) return;
+		// console.log(this.playerIndex + " is the player Index " + player.seat);
+		// console.log("Folding for player " + player.username);
+		if(this.playerIndex != player.seat) return;
 		// console.log("Here");
 		player.fold();
+		this.agent.emit('fold', {seat : player.seat});
 		// this.playersInHand[player.seat] = -1;
-		this.assignTurn(this.getNextPlayer(player.index));
+		this.assignTurn(this.getNextPlayer(player.seat));
 		// console.log(this.raisedBy);
 	}
 
 	check(player){
-		if(this.playerIndex != player.index) return;
+		if(this.playerIndex != player.seat) return;
 		if(this.currentBet != player.currentBet) return;
-		console.log("Checked");
-		this.assignTurn(this.getNextPlayer(player.index));
+		// console.log("Checked");
+		this.agent.emit('check', {seatID : player.seat});
+		this.assignTurn(this.getNextPlayer(player.seat));
 	}
 
 	winner(player, amount){
@@ -186,9 +190,9 @@ class Hand{
 	assignTurn(pos){
 		// return contract.getCurrentTurn();
 		// console.log("Pos : " + pos + " RaisedBy : " + this.raisedBy);
-		console.log("State " + this.state);
+		// console.log("State " + this.state);
 		this.turnNumber += 1;
-		console.log(this.turnNumber + " this.turnNumber");
+		// console.log(this.turnNumber + " this.turnNumber");
 		if(pos == this.raisedBy) {
 			var start = pos;
 			// console.log("In HERE");
@@ -204,13 +208,13 @@ class Hand{
 				}
 			}
 			if (this.state == 0){
-				console.log("Assigning Turn: " + pos);
+				// console.log("Assigning Turn: " + pos);
 				this.state ++;
 				this.playerIndex = pos;
 			}
 			else if (this.state == 1){
 				this.state++;
-				console.log("Showing flop");
+				// console.log("Showing flop");
 				this.showFlop();
 				this.playerIndex = this.getNextPlayer(this.dealerPos);
 			}
@@ -231,15 +235,15 @@ class Hand{
 			}
 		}
 		else{
-			console.log("Assigning Turn : " + pos);
+			// console.log("Assigning Turn : " + pos);
 			this.playerIndex = pos;
 		}
 
-		setTimeout(this.autoFold.bind(this), 2000, this.playersInHand[this.playerIndex], this.turnNumber);
+		// setTimeout(this.autoFold.bind(this), 2000, this.playersInHand[this.playerIndex], this.turnNumber);
 	}
 
 	autoFold(player, turnNumber){
-		console.log("Folding for player " + player.username + " " + turnNumber + " : " + this.turnNumber);
+		// console.log("Folding for player " + player.username + " " + turnNumber + " : " + this.turnNumber);
 		if(this.turnNumber == turnNumber){
 			this.fold(player);
 			// console.log("Folding")
@@ -273,6 +277,21 @@ class Hand{
 			if(this.playersInHand[key] != -1)
 				console.log(key + " : " + this.playersInHand[key].username + " , " + this.playersInHand[key].balance);
 		}
+	}
+
+	getPublicData(){
+		var reply = {
+			hand_id : this.hand_id,
+			pot : this.pot,
+			raisedBy : this.raisedBy,
+			dealerPos : this.dealerPos,
+			flop : this.flop,
+			turn : this.turn,
+			river : this.river,
+			playerTurn : this.playerIndex,
+			smallBlind : this.smallBlind
+		}
+		return reply;
 	}
 };
 
