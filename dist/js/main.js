@@ -5,6 +5,7 @@
 var playerID= -1;
 var playerData = -1;
 var playerInfo = -1;
+var handData = -1;
 
 $(document).ready(() => {
     console.log(playerInfo.email = window.localStorage.getItem('email'));
@@ -46,10 +47,17 @@ function removePlayer(seat) {
 function deactivatePlayer(seatID) {
     var seat = seatID+1;
     var id = '#p'+seat;    
-    console.log(id);
     
-    $(id+' .card-1').addClass('transparent')
-    $(id+' .card-2').addClass('transparent')
+    $(id+' .card-1').addClass('d-none')
+    $(id+' .card-2').addClass('d-none')
+}
+
+function activateEvery() {
+    for(var i=1; i<=8; i++) {
+        var id = '#p'+i; 
+        $(id+' .card-1').removeClass('d-none')
+        $(id+' .card-2').removeClass('d-none')  
+    } 
 }
 
 function action(seat, action, money) {
@@ -90,7 +98,6 @@ function updateTable(players) {
         if (players.hasOwnProperty(key)) {
             const ele = players[key];
             addPlayer(ele, key);
-            if(key>=7) break;
         }
     }    
 }
@@ -152,25 +159,18 @@ socket.on('time', (name) => {
 socket.on('message', (msg) => {
     console.log('message', msg);
 })
-
+   
 
 function seatMeHere(seat) {
-    console.log('seat', seat);
     socket.emit('seatPlayer', {
         seatPosition: Number(seat) - 1,
         playerData
     },
     (data) => {
-        console.log(data);
-        for (const key in data.players) {
-            if (data.players.hasOwnProperty(key)) {
-                const ele = data.players[key];
-                addPlayer(data.players[key], key);
-                var sss = Number(key)+1;
-                $('#p'+sss+'>.seat').addClass('d-none')
-                if(key>=7) break;
-            }
-        }
+        console.log('seat',data);
+        updateTable(data.players);
+        removeAllPlus();
+        handData = data.handData;
         
     })
 }
@@ -229,15 +229,6 @@ var Bet = () => {
         
     })
 }
-
-
-
-
-
-
-
-
-
 
 
 

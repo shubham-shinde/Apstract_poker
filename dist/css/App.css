@@ -79,6 +79,10 @@ body {
 
 .player {
   position: absolute;
+  min-width: 300px;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
 }
 
 #p1 {
