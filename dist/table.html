@@ -36,11 +36,44 @@
     <div id="root">
       <!-- <h1 class="text-white text-center m-3">Poker Game</h1> -->
       <div class="table">
+        <div class="main-cards d-flex position-absolute"
+        style="top:50%; left: 50%;transform: translate(-50%, -100%);">
+            <img
+              class="mx-1 card-1 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+            <img
+              class="mx-1 card-2 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="lo"
+            />
+            <img
+              class="mx-1 card-3 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+            <img
+              class="mx-1 card-4 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="lo"
+            />
+            <img
+              class="mx-1 card-5 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+        </div>
         <div id="p1" class="player d-none">
           <button
             onclick='seatMeHere(1);'
             class="seat btn btn-circle btn-lg mx-auto btn-dark"
-            style="font-size: 2em;height: 150px; width: 150px;"
+            style="font-size: 2em;height: 100px; width: 100px;"
           >
             +
           </button>
@@ -70,6 +103,14 @@
                 <p class="px-1 m-0 user-name">My name</p>
               </div>
             </div>
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
+            </div>
+
           </div>
         </div>
 
@@ -77,7 +118,7 @@
           <button
             onclick='seatMeHere(2);'
             class="seat btn btn-circle btn-lg mx-auto btn-dark"
-            style="font-size: 2em; height: 150px; width: 150px;"
+            style="font-size: 2em; height: 100px; width: 100px;"
           >
             +
           </button>
@@ -106,6 +147,13 @@
                 <p class="px-1 m-0 user-money">money</p>
                 <p class="px-1 m-0 user-name">My name</p>
               </div>
+            </div>
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
             </div>
           </div>
         </div>
@@ -114,7 +162,7 @@
           <button
             onclick='seatMeHere(3);'
             class="seat btn btn-circle btn-lg mx-auto btn-dark"
-            style="font-size: 2em; height: 150px; width: 150px;"
+            style="font-size: 2em; height: 100px; width: 100px;"
           >
             +
           </button>
@@ -143,6 +191,13 @@
                 <p class="px-1 m-0 user-money">money</p>
                 <p class="px-1 m-0 user-name">My name</p>
               </div>
+            </div>
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
             </div>
           </div>
         </div>
@@ -151,7 +206,7 @@
           <button
             onclick='seatMeHere(4);'
             class="seat btn btn-circle btn-lg mx-auto btn-dark"
-            style="font-size: 2em; height: 150px; width: 150px;"
+            style="font-size: 2em; height: 100px; width: 100px;"
           >
             +
           </button>
@@ -180,6 +235,13 @@
                 <p class="px-1 m-0 user-money">money</p>
                 <p class="px-1 m-0 user-name">My name</p>
               </div>
+            </div>
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
             </div>
           </div>
         </div>
@@ -188,7 +250,7 @@
           <button
             onclick='seatMeHere(5);'
             class="seat btn btn-circle btn-lg mx-auto btn-dark"
-            style="font-size: 2em; height: 150px; width: 150px;"
+            style="font-size: 2em; height: 100px; width: 100px;"
           >
             +
           </button>
@@ -218,6 +280,13 @@
               height="120"
               alt="lo"
             />
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
+            </div>
           </div>
         </div>
 
@@ -225,7 +294,7 @@
           <button
             onclick='seatMeHere(6);'
             class="seat btn btn-circle btn-lg mx-auto btn-dark"
-            style="font-size: 2em; height: 150px; width: 150px;"
+            style="font-size: 2em; height: 100px; width: 100px;"
           >
             +
           </button>
@@ -255,6 +324,13 @@
               height="120"
               alt="lo"
             />
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
+            </div>
           </div>
         </div>
 
@@ -262,7 +338,7 @@
           <button
             onclick='seatMeHere(7);'
             class="seat btn btn-circle btn-lg mx-auto btn-dark"
-            style="font-size: 2em; height: 150px; width: 150px;"
+            style="font-size: 2em; height: 100px; width: 100px;"
           >
             +
           </button>
@@ -292,6 +368,13 @@
               height="120"
               alt="lo"
             />
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
+            </div>
           </div>
         </div>
 
@@ -299,7 +382,7 @@
           <button
             onclick='seatMeHere(8);'
             class="seat btn btn-circle btn-lg mx-auto btn-dark"
-            style="font-size: 2em; height: 150px; width: 150px;"
+            style="font-size: 2em; height: 100px; width: 100px;"
           >
             +
           </button>
@@ -329,6 +412,13 @@
               height="120"
               alt="lo"
             />
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
+            </div>
           </div>
         </div>
 

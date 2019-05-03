@@ -102,7 +102,38 @@ function updateTable(players) {
     }    
 }
 
+function setTimer(seatID, time) {
+    var seat = seatID+1;
+    var id = '#p'+seat;   
+    if($(id + ' .countdown').hasClass('d-none')) {
+        $(id + ' .countdown').removeClass('d-none');
+    }
+    $(id+ ' .countdown svg circle').css('stroke-dashoffset', 113 - 113*time + 'px')
 
+}
+
+
+
+function openFlop(card1, card2, card3) {
+    $('.main-cards .card-1').removeClass('d-none')
+    $('.main-cards .card-1').attr('src', '../assets/Cards/'+card1+'.png');
+    $('.main-cards .card-2').removeClass('d-none')
+    $('.main-cards .card-2').attr('src', '../assets/Cards/'+card2+'.png');
+    $('.main-cards .card-3').removeClass('d-none')
+    $('.main-cards .card-3').attr('src', '../assets/Cards/'+card3+'.png');
+}
+
+function openRiver(card) {
+    $('.main-cards .card-5').removeClass('d-none')
+    $('.main-cards .card-5').attr('src', '../assets/Cards/'+card+'.png');
+    
+}
+
+function openTurn(card) {
+    $('.main-cards .card-4').removeClass('d-none')
+    $('.main-cards .card-4').attr('src', '../assets/Cards/'+card+'.png');
+    
+}
 
 
 
@@ -121,43 +152,59 @@ socket.on('connect', function () {
     socket.on('state', players => {
         updateTable(players);
     })
-    socket.on('fold', seatID => {
+    socket.on('fold', ({seatID}) => {        
         var seat = seatID + 1;
         $('#p'+seat+' .user-action').removeClass('d-none') 
+        if(!($('#p'+seat+ ' .countdown').hasClass('d-none'))) {
+            $('#p'+seat+ ' .countdown').addClass('d-none')
+        }
         $('#p'+seat+' .user-action').html('Fold')
     })    
-    socket.on('call', seatID => {
+    socket.on('call', ({seatID}) => {
         var seat = seatID + 1;
         $('#p'+seat+' .user-action').removeClass('d-none')
         $('#p'+seat+' .user-action').html('Call')
+        if(!($('#p'+seat+ ' .countdown').hasClass('d-none'))) {
+            $('#p'+seat+ ' .countdown').addClass('d-none')
+        }
 
     })
-    socket.on('check', seatID => {
+    socket.on('check', ({seatID}) => {
         var seat = seatID + 1;
         $('#p'+seat+' .user-action').removeClass('d-none')
         $('#p'+seat+' .user-action').html('Check')
+        if(!($('#p'+seat+ ' .countdown').hasClass('d-none'))) {
+            $('#p'+seat+ ' .countdown').addClass('d-none')
+        }
 
     })
-    socket.on('raise', (seatID, value) => {
+    socket.on('raise', ({seatID, value}) => {
         var seat = seatID + 1;
         $('#p'+seat+' .user-action').removeClass('d-none')
         $('#p'+seat+' .user-action').html('Raise '+value)
+        if(!($('#p'+seat+ ' .countdown').hasClass('d-none'))) {
+            $('#p'+seat+ ' .countdown').addClass('d-none')
+        }
 
     })
-    socket.on('bet', (seatID, value) => {
+    socket.on('bet', ({seatID, value}) => {
         var seat = seatID + 1;
         $('#p'+seat+' .user-action').removeClass('d-none')
         $('#p'+seat+' .user-action').html('Bet '+value)
+        if(!($('#p'+seat+ ' .countdown').hasClass('d-none'))) {
+            $('#p'+seat+ ' .countdown').addClass('d-none')
+        }
 
     })    
-})
 
-socket.on('time', (name) => {
-    console.log('time', name);    
-})
-
-socket.on('message', (msg) => {
-    console.log('message', msg);
+    socket.on('time', (time) => {
+        console.log('time', time);  
+        setTimer(time.activeSeat, time.time);
+    })
+    
+    socket.on('message', (msg) => {
+        console.log('message', msg);
+    })
 })
    
 
@@ -238,3 +285,13 @@ var Bet = () => {
 
 
 
+// var countdownNumberEl = document.getElementById('countdown-number');
+// var countdown = 10;
+
+// countdownNumberEl.textContent = countdown;
+
+// setInterval(function() {
+//   countdown = --countdown <= 0 ? 10 : countdown;
+
+//   countdownNumberEl.textContent = countdown;
+// }, 1000);
