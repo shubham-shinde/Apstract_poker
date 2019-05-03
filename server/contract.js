@@ -127,7 +127,7 @@ export async function getFlop(handId){
             if(ele.handId == handId) return ele.flop
         }
     }
-    return null;
+    return false;
 }
 
 export async function getTurn(handId){
@@ -139,7 +139,7 @@ export async function getTurn(handId){
             if(ele.handId == handId) return ele.turn
         }
     }
-    return null;
+    return false;
 }
 
 export async function getRiver(handId){
@@ -151,7 +151,7 @@ export async function getRiver(handId){
             if(ele.handId == handId) return ele.river
         }
     }
-    return null;
+    return false;
 }
 
 export async function showdown(handId){
@@ -172,5 +172,5 @@ export async function getCurrentPlayer(handId){
             if(ele.handId == handId) return ele.currentPlayer
         }
     }
-    return null;
+    return false;
 }
