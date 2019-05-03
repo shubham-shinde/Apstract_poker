@@ -119,39 +119,54 @@ export async function fold(playerId, handId, handSeatId){
     }
 }
 export async function getFlop(handId){
-    var transection = await eos.makeAction(ACTOR, KEY, 'openflop', {s: ACTOR, handId} , ContractConnection)
-    var data = await eos.getTableRows(ContractConnection, 'hand');
-    for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-            const ele = data[key];
-            if(ele.handId == handId) return ele.flop
+    try {
+        var transection = await eos.makeAction(ACTOR, KEY, 'openflop', {s: ACTOR, handId} , ContractConnection)
+        var data = await eos.getTableRows(ContractConnection, 'hand');
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                const ele = data[key];
+                if(ele.handId == handId) return ele.flop
+            }
         }
+        return false;
     }
-    return false;
+    catch(err) {
+        return false;
+    }
 }
 
 export async function getTurn(handId){
-    await eos.makeAction(ACTOR, KEY, 'openturn', {s: ACTOR, handId} , ContractConnection)
-    var data = await eos.getTableRows(ContractConnection, 'hand');
-    for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-            const ele = data[key];
-            if(ele.handId == handId) return ele.turn
+    try {
+        await eos.makeAction(ACTOR, KEY, 'openturn', {s: ACTOR, handId} , ContractConnection)
+        var data = await eos.getTableRows(ContractConnection, 'hand');
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                const ele = data[key];
+                if(ele.handId == handId) return ele.turn
+            }
         }
+        return false;
+        
+    } catch (error) {
+        return false;
     }
-    return false;
 }
 
 export async function getRiver(handId){
-    await eos.makeAction(ACTOR, KEY, 'openriver', {s: ACTOR, handId} , ContractConnection)
-    var data = await eos.getTableRows(ContractConnection, 'hand');
-    for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-            const ele = data[key];
-            if(ele.handId == handId) return ele.river
+    try {
+        await eos.makeAction(ACTOR, KEY, 'openriver', {s: ACTOR, handId} , ContractConnection)
+        var data = await eos.getTableRows(ContractConnection, 'hand');
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                const ele = data[key];
+                if(ele.handId == handId) return ele.river
+            }
         }
+        return false;
+        
+    } catch (error) {
+        return false;
     }
-    return false;
 }
 
 export async function showdown(handId){
@@ -164,13 +179,18 @@ export async function showdown(handId){
 }
 
 export async function getCurrentPlayer(handId){
-    // var transection = await eos.makeAction(ACTOR, KEY, 'openflop', {s: ACTOR, handId} , ContractConnection)
-    var data = await eos.getTableRows(ContractConnection, 'hand');
-    for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-            const ele = data[key];
-            if(ele.handId == handId) return ele.currentPlayer
+    try {
+        // var transection = await eos.makeAction(ACTOR, KEY, 'openflop', {s: ACTOR, handId} , ContractConnection)
+        var data = await eos.getTableRows(ContractConnection, 'hand');
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                const ele = data[key];
+                if(ele.handId == handId) return ele.currentPlayer
+            }
         }
+        return false;
+        
+    } catch (error) {
+        return false;
     }
-    return false;
 }
