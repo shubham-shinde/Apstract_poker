@@ -166,3 +166,7 @@ body {
 .raise-input {
   max-width: 100px;
 }
+
+.transparent {
+  opacity: 0;
+}
