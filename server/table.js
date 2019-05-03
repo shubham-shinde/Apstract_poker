@@ -8,7 +8,7 @@ var abcd = -1;
 
 class Table{
 	constructor(playersOnTable, smallBlind, minBuyIn, maxBuyIn, io){
-		this.playersOnTable = playersOnTable;
+		this.playersOnTable = {0 : -1 , 1 : -1 , 2 : -1 , 3 : -1 , 4 : -1 , 5 : -1 , 6 : -1 , 7 : -1 , 8 : -1};
 		this.smallBlind = smallBlind;
 		this.minBuyIn = minBuyIn;
 		this.maxBuyIn = maxBuyIn;
@@ -68,11 +68,19 @@ class Table{
 
 	seatPlayer(seatPosition, player){
 		if(this.seats[seatPosition] == -1){
-			// contract.seatPlayer(player.index, seatPosition);
-			//verify if this actually happened
-			// playersOnTable.push(playerID);
+
+			for(var key in this.playersOnTable){
+				if(this.playersOnTable[key].username == player.username) {
+					console.log("Already on table");
+					return false;
+				}
+			}
+
 			this.seats[seatPosition] = player;
+			this.playersOnTable[seatPosition]  = player;
 			player.seatPlayer(seatPosition);
+
+			return true;
 		}
 		else{
 			return false;
@@ -80,7 +88,46 @@ class Table{
 	}
 
 	getState(){
-		// return all the data for the game.
+		var reply = {
+			playerData : this.getPublicPlayerData(),
+			handData : this.currentHand.getPublicData()
+		}
+		return reply;
+		// return all the data for the game. 
+	}
+
+	getPublicPlayerData(){
+		var ret = [];
+		for(var key in this.playersOnTable){
+			if(this.playersOnTable[key] != -1){
+				ret.push(this.playersOnTable[key].getPublicData());
+			}
+			else{
+				var p = new Player();
+				ret.push(p.getPublicData());
+			}
+		}
+		return ret;
+	}
+
+	getPlayerWithID(playerID){
+		// for(var key in this.)
+	}
+
+	getCurrentTurn(){
+		return ;
+	}
+
+	getPlayerSeat(playerID){
+		console.log("playerID  " + playerID);
+		for(var key in this.playersOnTable){
+			if(this.playersOnTable[key].playerID == playerID){
+				console.log("playerID : " + playerID + " key : " + key);
+				return key;
+			}
+
+		}
+		return -1;
 	}
 }
 

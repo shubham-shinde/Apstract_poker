@@ -59,21 +59,23 @@ var chatHandler = new ChatHandler(io);
 // console.log(io + " IO");
 
 // var game = new Game();
-var table = new Table([], 100, 20000, 40000, io);
+var table = new Table([], 10, 2000, 4000, io);
 // table.setSocket(io);
 
 var players = [];
 var connections = [];
 
+start(table);
+
 io.on('connection', (socket) => {
 	console.log(socket.id);
 	
-	connections.push(socket);
+	// connections.push(socket);
 
-	app.get("/hii", (req, res) => {
-		socket.emit("Hello");
-		res.end();
-	});
+	// app.get("/hii", (req, res) => {
+	// 	socket.emit("Hello");
+	// 	res.end();
+	// });
 
 	// io.emit('time', 'timeout')
 
@@ -81,59 +83,86 @@ io.on('connection', (socket) => {
 	//TODO if player already exist in player table then make it active
 	//TODO if player email is invalid don't let if play but give current game state
 	socket.on('addPlayer', ({email, name, pic}, gameState) => {
+
+		console.log("Adding new connection");
 		
 		validatePlayer(email, function(result) {
-			var p = new Player(result.UserName, result.Balance, result.AccountName, result.PvtKey, result.Index, socket, true);
-			// players.push(p);
-			// p.display();
-			chatHandler.addConnection(p, socket);
-			// TODO : Where to assign id, DB or Contract
-			// players[Where do we assign ID, DB or Contract] = 
-			gameState(players);
-			players.push(p);
-			start();
+			var p = new Player(result.PlayerID, result.Email, result.UserName, result.Balance, result.AccountName, result.PvtKey, result.Index, socket, true);
+			console.log(result);
+			var playerData = table.getPublicPlayerData()
+			var reply = {
+				players : playerData,
+				pot : table.currentHand.pot,
+				playerData : {
+					playerID : result.PlayerID,
+					username : result.UserName,
+					balance : result.Balance,
+					accountName : result.AccountName,
+					pvtKey : result.PvtKey,
+					email : result.Email
+				}
+			}
+			console.log(reply);
+			gameState(reply);
 		}, function(fail) {
 			console.log("No player found");
 		})
 	});
 
-	socket.on('seatPlayer', ({seatPosition, playerID}, seatPlayer) => {
-		if(table.seatPlayer(seatPosition, playerID)){
+	socket.on('seatPlayer', ({seatPosition, playerData}, callback) => {
+		if(table.seatPlayer(seatPosition, new Player(playerData.playerID, playerData.username, playerData.balance, playerData.accountName, playerData.pvtKey, 0, socket, true, playerData.pic))){
 			// The player was seated on the table
+			// console.log("HERE");
+			// console.log(table.playersOnTable[seatPosition]);
+			var playerData = table.getPublicPlayerData();
+			var reply = {
+				players : playerData,
+				seat : 5,
+				balance : table.playersOnTable[seatPosition].balance
+			}
+			console.log(table.getState());
+			callback(table.getState());
 		}
 		else{
 			// The player couldn't be seated
+			// console.log(seatPosition, playerData);
+			// seatPlayer
 		}
 	});
 
 	socket.on('call', ({playerID, handID}, onCall) => {
-		table.currentHand.call(table.playersInHand[table.getPlayerSeat(playerID)]);
+		table.currentHand.call(table.playersOnTable[table.getPlayerSeat(playerID)]);
+		onCall(table.getState());
+		io.emit('state', table.getState());
 	});
 
 	socket.on('bet', ({playerID, handID, betValue}, onBet) => {
-
+		table.currentHand.bet(table.playersOnTable[table.getPlayerSeat(playerID)], betValue);
+		onBet(table.getState());
+		io.emit('state', table.getState());
 	});
 
 	socket.on('raise', ({playerID, handID, raiseValue}, onRaise) => {
-
+		table.currentHand.bet(table.playersOnTable[table.getPlayerSeat(playerID)], raiseValue);
+		onRaise(table.getState());
+		io.emit('state', table.getState());
 	});
 
 	socket.on('fold', ({playerID, handID}, onFold) => {
-
+		table.currentHand.fold(table.playersOnTable[table.getPlayerSeat(playerID)]);
+		onFold(table.getState());
+		io.emit('state', table.getState());
 	});
-	// socket.on('message',(message) => {
-	//     io.emit('message', message);
-	// })
 
+	socket.on('check', ({playerID, handID}, onCheck) => {
+		table.currentHand.check(table.playersOnTable[table.getPlayerSeat(playerID)]);
+		onCheck(table.getState());
+		io.emit('state', table.getState());
+	});
 
-	// socket.on('time', (name) => {
-	//     socket.broadcast.emit('time', name);
-	// })
-
-	//TODO Automate players Action on disconnect
 	socket.on('disconnect', () => {
 		// console.log('disconnected');
-		chatHandler.remove(socket);
+		// chatHandler.remove(socket);
 	})
 });
 
@@ -157,20 +186,21 @@ function validatePlayer(email, successCallback, failureCallback){
 				successCallback(result[0]);
 			}
 	  	});
+	  	con.end();
 	});
 }
 
-function start(){
-	var player1 = new Player("1", 3000, "abcde", "xyz", 0, null, true);
-	var player2 = new Player("2", 3000, "abcde", "xyz", 1, null, true);
-	var player3 = new Player("3", 3000, "abcde", "xyz", 2, null, true);
-	var player4 = new Player("4", 3000, "abcde", "xyz", 3, null, true);
-	var player5 = new Player("5", 3000, "abcde", "xyz", 4, null, true);
-	var player6 = new Player("6", 3000, "abcde", "xyz", 5, null, true);
+function start(table){
+	var player1 = new Player(6, "a@a.com", "Shubham", 3000, "abcde", "xyz", 0, null, true, ".");
+	var player2 = new Player(2, "b@a.com", "Shinde", 3000, "abcde", "xyz", 1, null, true, ".");
+	var player3 = new Player(3, "c@a.com", "Shuvam", 3000, "abcde", "xyz", 2, null, true, ".");
+	var player4 = new Player(4, "d@a.com", "Agarwal", 3000, "abcde", "xyz", 3, null, true, ".");
+	var player5 = new Player(5, "e@a.com", "Piyush", 3000, "abcde", "xyz", 4, null, true, ".");
+	// var player6 = new Player("6", 3000, "abcde", "xyz", 5, null, true);
 
 
 	// var hand = new Hand(0, );
-	var table = new Table([], 10, 2000, 4000, io);
+	// var table = new Table([], 10, 2000, 4000, io);
 
 	table.seatPlayer(0, player1);
 	table.seatPlayer(1, player2);
@@ -178,10 +208,10 @@ function start(){
 	table.seatPlayer(3, player4);
 	table.seatPlayer(4, player5);
 
-	for(var key in table.seats){
-		if(table.seats[key] != -1)
-			console.log(key, table.seats[key]);
-	}
+	// for(var key in table.seats){
+	// 	if(table.seats[key] != -1)
+	// 		console.log(key, table.seats[key]);
+	// }
 
 	table.startHand();
 
@@ -189,9 +219,9 @@ function start(){
 
 	table.currentHand.fold(player4);
 	table.currentHand.fold(player5);
-	// table.currentHand.fold(player1);
-	// table.currentHand.call(player2);
-	// table.currentHand.check(player3);
 
-	table.currentHand.display();
+
+	table.getPlayerSeat(3);
+
+	console.log(table.getState());
 }

@@ -1,5 +1,8 @@
 class Player{
-	constructor(username, balance, accountName, pvtKey, index, connection, active){
+	constructor(playerID, email, username, balance, accountName, pvtKey, index, connection, active, displayPic){
+		this.playerID = playerID;
+		this.displaypicture = displayPic
+		this.email = email;
 		this.username = username;
 		this.balance = balance;
 		this.accountName = accountName;
@@ -61,7 +64,7 @@ class Player{
 	}
 
 	display(){
-		console.log("Username " + this.username + ", Balance " + this.balance);
+		// console.log("Username " + this.username + ", Balance " + this.balance);
 	}
 
 	getFromBlockchain(val, successCallback, failureCallback){
@@ -70,6 +73,21 @@ class Player{
 
 	seatPlayer(seatPos){
 		this.seat = seatPos;
+	}
+
+	getPublicData(){
+		var reply = {
+			username : this.username,
+			balance : this.balance,
+			seat : this.seat,
+			currentBet : this.currentBet,
+			active : this.active,
+			inHand : this.inHand,
+			playerID : this.playerID,
+			displayPic : this.displayPic
+		};
+
+		return reply;
 	}
 }
 
