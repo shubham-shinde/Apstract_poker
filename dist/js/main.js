@@ -2,7 +2,7 @@
 // $('#p1').addClass('d-none')
 // $('#p2>img').attr('src', './assets/Cards_2/_0052_BACK.png')
 
-var playerID=-1;
+var playerID= -1;
 var playerData = -1;
 var playerInfo = -1;
 
@@ -116,7 +116,7 @@ socket.on('connect', function () {
     })
     socket.on('fold', seatID => {
         var seat = seatID + 1;
-        $('#p'+seat+' .user-action').removeClass('d-none')
+        $('#p'+seat+' .user-action').removeClass('d-none') 
         $('#p'+seat+' .user-action').html('Fold')
     })    
     socket.on('call', seatID => {
