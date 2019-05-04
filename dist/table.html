@@ -15,11 +15,11 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> -->
-    <link rel="stylesheet" href="../css/bootstrap.css">
-    <link rel="stylesheet" href="../css/dash.css">
-    <link rel="stylesheet" href="../css/index.css">
-    <link rel="stylesheet" href="../css/App.css">
-    <link rel="stylesheet" href="../css/intro.css">
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="../css/dash.css" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="../css/App.css" />
+    <link rel="stylesheet" href="../css/intro.css" />
     <!-- <link rel="stylesheet" href="./css/fontawesome.css"> -->
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
@@ -36,135 +36,428 @@
     <div id="root">
       <!-- <h1 class="text-white text-center m-3">Poker Game</h1> -->
       <div class="table">
-          <div id="p1" class="player d-none">
-            <img class="mx-1 card-1" src="../assets/Cards/BACK.png" height="120" alt="ok">
-            <img class="mx-1 card-2" src="../assets/Cards/BACK.png" height="120" alt="lo">
+        <div class="main-cards d-flex position-absolute"
+        style="top:50%; left: 50%;transform: translate(-50%, -100%);">
+            <img
+              class="mx-1 card-1 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+            <img
+              class="mx-1 card-2 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="lo"
+            />
+            <img
+              class="mx-1 card-3 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+            <img
+              class="mx-1 card-4 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="lo"
+            />
+            <img
+              class="mx-1 card-5 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+        </div>
+        <div id="p1" class="player d-none">
+          <button
+            onclick='seatMeHere(1);'
+            class="seat btn btn-circle btn-lg mx-auto btn-dark"
+            style="font-size: 2em;height: 100px; width: 100px;"
+          >
+            +
+          </button>
+          <div class="main d-none">
+            <img
+              class="mx-1 card-1 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+            <img
+              class="mx-1 card-2 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="lo"
+            />
             <div class="person position-relative">
-              <img class="userImg" height='70' src="../assets/images/download.png" alt="">
+              <img
+                class="userImg"
+                height="70"
+                src="../assets/images/download.png"
+                alt=""
+              />
               <div class="make-float d-flex flex-column align-items-center">
                 <p class="px-1 m-0 user-action d-none">action taken</p>
                 <p class="px-1 m-0 user-money">money</p>
                 <p class="px-1 m-0 user-name">My name</p>
               </div>
             </div>
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
+            </div>
+
           </div>
+        </div>
 
-
-
-          <div id="p2" class="player d-none">
-              <img class="mx-1 card-1" src="../assets/Cards/BACK.png" height="120" alt="ok">
-              <img class="mx-1 card-2" src="../assets/Cards/BACK.png" height="120" alt="lo">
-              <div class="person position-relative">
-                <img class="userImg" height='70' src="../assets/images/download.png" alt="">
-                <div class="make-float d-flex flex-column align-items-center">
-                  <p class="px-1 m-0 user-action d-none">action taken</p>
-                  <p class="px-1 m-0 user-money">money</p>
-                  <p class="px-1 m-0 user-name">My name</p>
-                </div>
+        <div id="p2" class="player d-none">
+          <button
+            onclick='seatMeHere(2);'
+            class="seat btn btn-circle btn-lg mx-auto btn-dark"
+            style="font-size: 2em; height: 100px; width: 100px;"
+          >
+            +
+          </button>
+          <div class="main d-none">
+            <img
+              class="mx-1 card-1 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+            <img
+              class="mx-1 card-2 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="lo"
+            />
+            <div class="person position-relative">
+              <img
+                class="userImg"
+                height="70"
+                src="../assets/images/download.png"
+                alt=""
+              />
+              <div class="make-float d-flex flex-column align-items-center">
+                <p class="px-1 m-0 user-action d-none">action taken</p>
+                <p class="px-1 m-0 user-money">money</p>
+                <p class="px-1 m-0 user-name">My name</p>
               </div>
             </div>
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
+            </div>
+          </div>
+        </div>
 
-
-
-          <div id="p3" class="player d-none">
-              <img class="mx-1 card-1" src="../assets/Cards/BACK.png" height="120" alt="ok">
-              <img class="mx-1 card-2" src="../assets/Cards/BACK.png" height="120" alt="lo">
-              <div class="person position-relative">
-                <img class="userImg" height='70' src="../assets/images/download.png" alt="">
-                <div class="make-float d-flex flex-column align-items-center">
-                  <p class="px-1 m-0 user-action d-none">action taken</p>
-                  <p class="px-1 m-0 user-money">money</p>
-                  <p class="px-1 m-0 user-name">My name</p>
-                </div>
+        <div id="p3" class="player d-none">
+          <button
+            onclick='seatMeHere(3);'
+            class="seat btn btn-circle btn-lg mx-auto btn-dark"
+            style="font-size: 2em; height: 100px; width: 100px;"
+          >
+            +
+          </button>
+          <div class="main d-none">
+            <img
+              class="mx-1 card-1 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+            <img
+              class="mx-1 card-2 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="lo"
+            />
+            <div class="person position-relative">
+              <img
+                class="userImg"
+                height="70"
+                src="../assets/images/download.png"
+                alt=""
+              />
+              <div class="make-float d-flex flex-column align-items-center">
+                <p class="px-1 m-0 user-action d-none">action taken</p>
+                <p class="px-1 m-0 user-money">money</p>
+                <p class="px-1 m-0 user-name">My name</p>
               </div>
             </div>
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
+            </div>
+          </div>
+        </div>
 
-
-
-          <div id="p4" class="player d-none">
-              <img class="mx-1 card-1" src="../assets/Cards/BACK.png" height="120" alt="ok">
-              <img class="mx-1 card-2" src="../assets/Cards/BACK.png" height="120" alt="lo">
-              <div class="person position-relative">
-                <img class="userImg" height='70' src="../assets/images/download.png" alt="">
-                <div class="make-float d-flex flex-column align-items-center">
-                  <p class="px-1 m-0 user-action d-none">action taken</p>
-                  <p class="px-1 m-0 user-money">money</p>
-                  <p class="px-1 m-0 user-name">My name</p>
-                </div>
+        <div id="p4" class="player d-none">
+          <button
+            onclick='seatMeHere(4);'
+            class="seat btn btn-circle btn-lg mx-auto btn-dark"
+            style="font-size: 2em; height: 100px; width: 100px;"
+          >
+            +
+          </button>
+          <div class="main d-none">
+            <img
+              class="mx-1 card-1 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+            <img
+              class="mx-1 card-2 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="lo"
+            />
+            <div class="person position-relative">
+              <img
+                class="userImg"
+                height="70"
+                src="../assets/images/download.png"
+                alt=""
+              />
+              <div class="make-float d-flex flex-column align-items-center">
+                <p class="px-1 m-0 user-action d-none">action taken</p>
+                <p class="px-1 m-0 user-money">money</p>
+                <p class="px-1 m-0 user-name">My name</p>
               </div>
             </div>
-
-
-
-          <div id="p5" class="player d-none">
-              <div class="person position-relative">
-                <img class="userImg" height='70' src="../assets/images/download.png" alt="">
-                <div class="make-float d-flex flex-column align-items-center">
-                  <p class="px-1 m-0 user-action d-none">action taken</p>
-                  <p class="px-1 m-0 user-money">money</p>
-                  <p class="px-1 m-0 user-name">My name</p>
-                </div>
-              </div>
-              <img class="mx-1 card-1" src="../assets/Cards/BACK.png" height="120" alt="ok">
-              <img class="mx-1 card-2" src="../assets/Cards/BACK.png" height="120" alt="lo">
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
             </div>
+          </div>
+        </div>
 
-
-
-          <div id="p6" class="player d-none">
-              <div class="person position-relative">
-                <img class="userImg" height='70' src="../assets/images/download.png" alt="">
-                <div class="make-float d-flex flex-column align-items-center">
-                  <p class="px-1 m-0 user-action d-none">action taken</p>
-                  <p class="px-1 m-0 user-money">money</p>
-                  <p class="px-1 m-0 user-name">My name</p>
-                </div>
+        <div id="p5" class="player d-none">
+          <button
+            onclick='seatMeHere(5);'
+            class="seat btn btn-circle btn-lg mx-auto btn-dark"
+            style="font-size: 2em; height: 100px; width: 100px;"
+          >
+            +
+          </button>
+          <div class="main d-none">
+            <div class="person position-relative">
+              <img
+                class="userImg"
+                height="70"
+                src="../assets/images/download.png"
+                alt=""
+              />
+              <div class="make-float d-flex flex-column align-items-center">
+                <p class="px-1 m-0 user-action d-none">action taken</p>
+                <p class="px-1 m-0 user-money">money</p>
+                <p class="px-1 m-0 user-name">My name</p>
               </div>
-              <img class="mx-1 card-1" src="../assets/Cards/BACK.png" height="120" alt="ok">
-              <img class="mx-1 card-2" src="../assets/Cards/BACK.png" height="120" alt="lo">
             </div>
+            <img
+              class="mx-1 card-1 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+            <img
+              class="mx-1 card-2 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="lo"
+            />
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
+            </div>
+          </div>
+        </div>
 
-
-
-          <div id="p7" class="player d-flex">
-              <div class="person position-relative">
-                <img class="userImg" height='70' src="../assets/images/download.png" alt="">
-                <div class="make-float d-flex flex-column align-items-center">
-                  <p class="px-1 m-0 user-action d-none">action taken</p>
-                  <p class="px-1 m-0 user-money">money</p>
-                  <p class="px-1 m-0 user-name">My name</p>
-                </div>
+        <div id="p6" class="player d-none">
+          <button
+            onclick='seatMeHere(6);'
+            class="seat btn btn-circle btn-lg mx-auto btn-dark"
+            style="font-size: 2em; height: 100px; width: 100px;"
+          >
+            +
+          </button>
+          <div class="main d-none">
+            <div class="person position-relative">
+              <img
+                class="userImg"
+                height="70"
+                src="../assets/images/download.png"
+                alt=""
+              />
+              <div class="make-float d-flex flex-column align-items-center">
+                <p class="px-1 m-0 user-action d-none">action taken</p>
+                <p class="px-1 m-0 user-money">money</p>
+                <p class="px-1 m-0 user-name">My name</p>
               </div>
-              <img class="mx-1 card-1" src="../assets/Cards/BACK.png" height="120" alt="ok">
-              <img class="mx-1 card-2" src="../assets/Cards/BACK.png" height="120" alt="lo">
             </div>
+            <img
+              class="mx-1 card-1 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+            <img
+              class="mx-1 card-2 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="lo"
+            />
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
+            </div>
+          </div>
+        </div>
 
-
-
-          <div id="p8" class="player d-flex">
-              <div class="person position-relative">
-                <img class="userImg" height='70' src="../assets/images/download.png" alt="">
-                <div class="make-float d-flex flex-column align-items-center">
-                  <p class="px-1 m-0 user-action d-none">action taken</p>
-                  <p class="px-1 m-0 user-money">money</p>
-                  <p class="px-1 m-0 user-name">My name</p>
-                </div>
+        <div id="p7" class="player d-none">
+          <button
+            onclick='seatMeHere(7);'
+            class="seat btn btn-circle btn-lg mx-auto btn-dark"
+            style="font-size: 2em; height: 100px; width: 100px;"
+          >
+            +
+          </button>
+          <div class="main d-none">
+            <div class="person position-relative">
+              <img
+                class="userImg"
+                height="70"
+                src="../assets/images/download.png"
+                alt=""
+              />
+              <div class="make-float d-flex flex-column align-items-center">
+                <p class="px-1 m-0 user-action d-none">action taken</p>
+                <p class="px-1 m-0 user-money">money</p>
+                <p class="px-1 m-0 user-name">My name</p>
               </div>
-              <img class="mx-1 card-1" src="../assets/Cards/BACK.png" height="120" alt="ok">
-              <img class="mx-1 card-2" src="../assets/Cards/BACK.png" height="120" alt="lo">
             </div>
+            <img
+              class="mx-1 card-1 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+            <img
+              class="mx-1 card-2 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="lo"
+            />
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
+            </div>
+          </div>
+        </div>
 
-          <div class="d-flex position-absolute btn-div min-width-100 justify-content-center align-items-center">
-            <button class="btn btn-lg btn-danger m-2">Fold</button>
-            <button class="btn btn-lg btn-primary m-2">Check</button>
-            <button class="btn btn-lg btn-success m-2">Raise</button>
-            <input class="form-control raise-input m-2" type="number" onchange="inputChangeRaise(this.value);" name="raise" id="raise-input">
-            <input class="slider m-2" type="range" onchange="sliderChange(this.value);" id="raise-range">
-          </div>        
+        <div id="p8" class="player d-none">
+          <button
+            onclick='seatMeHere(8);'
+            class="seat btn btn-circle btn-lg mx-auto btn-dark"
+            style="font-size: 2em; height: 100px; width: 100px;"
+          >
+            +
+          </button>
+          <div class="main d-none">
+            <div class="person position-relative">
+              <img
+                class="userImg"
+                height="70"
+                src="../assets/images/download.png"
+                alt=""
+              />
+              <div class="make-float d-flex flex-column align-items-center">
+                <p class="px-1 m-0 user-action d-none">action taken</p>
+                <p class="px-1 m-0 user-money">money</p>
+                <p class="px-1 m-0 user-name">My name</p>
+              </div>
+            </div>
+            <img
+              class="mx-1 card-1 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="ok"
+            />
+            <img
+              class="mx-1 card-2 d-none"
+              src="../assets/Cards/BACK.png"
+              height="120"
+              alt="lo"
+            />
+            
+            <div class="countdown d-none">
+              <div class="countdown-number"></div>
+              <svg>
+                <circle r="18" cx="20" cy="20"></circle>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="d-flex position-absolute btn-div min-width-100 justify-content-center align-items-center"
+        >
+          <button onclick="Fold();" class="btn btn-lg btn-danger m-2">
+            Fold
+          </button>
+          <button onclick="Call();" class="btn btn-lg btn-success m-2">
+            Call
+          </button>
+          <button onclick="Bet();" class="btn btn-lg btn-primary m-2">
+            Bet
+          </button>
+          <button onclick="Check();" class="btn btn-lg btn-danger m-2">
+            Check
+          </button>
+          <button onclick="Raise();" class="btn btn-lg btn-success m-2">
+            Raise
+          </button>
+          <input
+            class="form-control raise-input m-2"
+            type="number"
+            onchange="inputChangeRaise(this.value);"
+            name="raise"
+            id="raise-input"
+          />
+          <input
+            class="slider m-2"
+            type="range"
+            onchange="sliderChange(this.value);"
+            id="raise-range"
+          />
+        </div>
       </div>
     </div>
   </body>
-  <script src='../js/socket.js'></script>
+  <script src="../js/socket.js"></script>
   <script src="../js/jquery.js"></script>
   <script src="../js/main.js"></script>
 </html>

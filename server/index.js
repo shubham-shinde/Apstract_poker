@@ -6,6 +6,10 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import * as ContractActions from './contract';
 
+// ContractActions.addPlayer('shubham5', 10, 300).then((data) => {
+// 	console.log('addplayer', data);
+// })
+
 // import ChatHandler from './chat';
 
 var ChatHandler = require('./chat.js');

@@ -79,53 +79,57 @@ body {
 
 .player {
   position: absolute;
+  min-width: 300px;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
 }
 
 #p1 {
   top: 20px;
-  left: 260px;
+  right: 260px;
 }
 
 
 #p2 {
   top: 160px;
-  left: 30px;
+  right: 30px;
 }
 
 
 #p3 {
   top: 330px;
-  left: 30px;
+  right: 30px;
 }
 
 
 #p4 {
   top: 480px;
-  left: 260px;
+  right: 260px;
 }
 
 
 #p5 {
-  top: 20px;
-  right: 260px;
+  top: 480px;
+  left: 260px;
 }
 
 
 #p6 {
-  top: 160px;
-  right: 30px;
+  top: 330px;
+  left: 30px;
 }
 
 
 #p7 {
-  top: 330px;
-  right: 30px;
+  top: 160px;
+  left: 30px;
 }
 
 
 #p8 {
-  top: 480px;
-  right: 260px;
+  top: 20px;
+  left: 260px;
 }
 
 .btn-div {
@@ -165,4 +169,60 @@ body {
 
 .raise-input {
   max-width: 100px;
+}
+
+.transparent {
+  opacity: 0;
+}
+
+
+
+
+
+
+
+
+
+
+.countdown {
+  position: relative;
+  margin: auto;
+  margin-top: 100px;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+}
+
+.countdown-number {
+  color: white;
+  display: inline-block;
+  line-height: 40px;
+}
+
+svg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  transform: rotateY(-180deg) rotateZ(-90deg);
+}
+
+svg circle {
+  stroke-dasharray: 113px;
+  stroke-dashoffset: 0px;
+  stroke-linecap: round;
+  stroke-width: 2px;
+  stroke: white;
+  fill: none;
+  /* animation: countdown 10s linear infinite forwards; */
+}
+
+@keyframes countdown {
+  from {
+    stroke-dashoffset: 0px;
+  }
+  to {
+    stroke-dashoffset: 113px;
+  }
 }

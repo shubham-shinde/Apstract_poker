@@ -1,7 +1,7 @@
 import eos from "./eos";
 //TODO : Call functions from smart contracts
-var ACTOR = 'zqectjpthygu'
-var KEY = '5KPnCxdpDZ4mEQPnWKxhSDVagde572VH5kMzCn97bacM9Y9ir6d'
+var ACTOR = 'eospokergame'
+var KEY = '5HzHemUESLjVts2oh8hYPj2ei9vewYa1Zo4CLfZKkYLJZGtLaE6'
 var ContractConnection = {
     EOS_CONTRACT_NAME: ACTOR,
     EOS_HTTP_ENDPOINT: "http://jungle2.cryptolions.io:80",
