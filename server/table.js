@@ -59,11 +59,16 @@ class Table{
 		// var p = new Player();
 		//get data from blockchain, including dealer position and people in hand
 		/*Pass data to the constructor to initialize the hand*/
-		this.currentHand = new Hand(0, playerList, 0, this.agent, 10);
+		var handID = 0;
+		if(this.currentHand) handID = this.currentHand.handID;
+		this.currentHand = new Hand(handID + 1, playerList, 0, this.agent, 10);
 		this.currentHand.startHand();
+
+		this.agent.emit('startHand', {handID : this.currentHand.handID});
 		// for(var player in this.playersOnTable){
 
 		// }
+		setTimeout(this.currentHandCheck.bind(this), 1000);
 	}
 
 	seatPlayer(seatPosition, player){
@@ -79,7 +84,6 @@ class Table{
 			this.seats[seatPosition] = player;
 			this.playersOnTable[seatPosition]  = player;
 			player.seatPlayer(seatPosition);
-
 			return true;
 		}
 		else{
@@ -89,7 +93,7 @@ class Table{
 
 	getState(){
 		var reply = {
-			playerData : this.getPublicPlayerData(),
+			players : this.getPublicPlayerData(),
 			handData : this.currentHand.getPublicData()
 		}
 		return reply;
@@ -128,6 +132,16 @@ class Table{
 
 		}
 		return -1;
+	}
+
+	currentHandCheck(){
+		if(this.currentHand.isFinished){
+			console.log("Hand finish has been acknowledged by Table");
+			setTimeout(this.startHand.bind(this), 1000);
+		}
+		else{
+			setTimeout(this.currentHandCheck.bind(this), 1000);
+		}
 	}
 }
 

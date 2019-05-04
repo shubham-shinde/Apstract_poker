@@ -1,20 +1,20 @@
 import eos from "./eos";
 //TODO : Call functions from smart contracts
-var ACTOR = 'eospokergame'
-var KEY = '5HzHemUESLjVts2oh8hYPj2ei9vewYa1Zo4CLfZKkYLJZGtLaE6'
+var ACTOR = 'zqectjpthygu'
+var KEY = '5KPnCxdpDZ4mEQPnWKxhSDVagde572VH5kMzCn97bacM9Y9ir6d'
 var ContractConnection = {
     EOS_CONTRACT_NAME: ACTOR,
     EOS_HTTP_ENDPOINT: "http://jungle2.cryptolions.io:80",
     KEY: KEY
 }
 
-export function addPlayer (playerAccountName, playerId, buyIn){
-    return eos.makeAction(ACTOR, KEY, 'addplayer', {s: ACTOR, playerAccountName, playerId, buyIn} , ContractConnection)   
-}
+// export function addPlayer (playerAccountName, playerId, buyIn){
+//     return eos.makeAction(ACTOR, KEY, 'addplayer', {s: ACTOR, playerAccountName, playerId, buyIn} , ContractConnection)   
+// }
 
-export function rmplayer(playerId){
-    return eos.makeAction(ACTOR, KEY, 'rmplayer', {s: ACTOR, playerId} , ContractConnection)
-}
+// export function rmplayer(playerId){
+//     return eos.makeAction(ACTOR, KEY, 'rmplayer', {s: ACTOR, playerId} , ContractConnection)
+// }
 
 export function seatPlayer(playerId, seatPosition){
     return eos.makeAction(ACTOR, KEY, 'seatplayer', {s: ACTOR, playerId, seatPosition} , ContractConnection)
@@ -59,6 +59,8 @@ export async function getFlop(handId){
         if (data.hasOwnProperty(key)) {
             const ele = data[key];
             if(ele.handId == handId) return ele.flop
+                //array of card
+                //ex. [{1,1}, {3, 2}, {5, 2}]
         }
     }
     return null;
@@ -71,6 +73,7 @@ export async function getTurn(handId){
         if (data.hasOwnProperty(key)) {
             const ele = data[key];
             if(ele.handId == handId) return ele.turn
+                //card i.e {2, 5}
         }
     }
     return null;
@@ -83,6 +86,7 @@ export async function getRiver(handId){
         if (data.hasOwnProperty(key)) {
             const ele = data[key];
             if(ele.handId == handId) return ele.river
+                //card i.e {3, 5}
         }
     }
     return null;
@@ -99,6 +103,7 @@ export async function getCurrentPlayer(handId){
         if (data.hasOwnProperty(key)) {
             const ele = data[key];
             if(ele.handId == handId) return ele.currentPlayer
+                //current player id i.e 4
         }
     }
     return null;

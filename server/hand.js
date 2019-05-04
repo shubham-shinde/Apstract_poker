@@ -19,6 +19,7 @@ class Hand{
 		this.maxPlayerCount = 8;
 		this.smallBlind = smallBlind;
 		this.turnNumber = 0;
+		this.isFinished = false;
 	}
 
 	startHand(){
@@ -51,7 +52,7 @@ class Hand{
 		this.agent.emit('message', {handID : 1, dealer : this.dealerPos, smallBlind : this.smallBlind, bigBlind : 2*this.smallBlind});
 
 		// this.raisedBy = this.getNextPlayer(this.getNextPlayer(this.getNextPlayer(this.dealerPos)));
-		// assignTurn(3);
+		this.assignTurn(this.playerIndex);
 	}
 
 	showFlop(){
@@ -117,8 +118,10 @@ class Hand{
 	}
 
 	finishHand(){
-		// console.log("Hand Finished");
-		// this.agent.emit('handfin', "Hand finished");
+		console.log("Hand Finished");
+
+		this.agent.emit('handfinished', {success : 1});
+		this.isFinished = true;
 	}
 
 	getPlayerAtPos(pos){
@@ -164,12 +167,11 @@ class Hand{
 	}
 
 	fold(player){
-		// console.log(this.playerIndex + " is the player Index " + player.seat);
-		// console.log("Folding for player " + player.username);
 		if(this.playerIndex != player.seat) return;
 		// console.log("Here");
 		player.fold();
-		this.agent.emit('fold', {seat : player.seat});
+		console.log("Folding for player " + player.username);
+		this.agent.emit('fold', {seatID : player.seat});
 		// this.playersInHand[player.seat] = -1;
 		this.assignTurn(this.getNextPlayer(player.seat));
 		// console.log(this.raisedBy);
@@ -188,6 +190,7 @@ class Hand{
 	}
 
 	assignTurn(pos){
+		if(this.isFinished) return;
 		// return contract.getCurrentTurn();
 		// console.log("Pos : " + pos + " RaisedBy : " + this.raisedBy);
 		// console.log("State " + this.state);
@@ -204,6 +207,7 @@ class Hand{
 					if(start == pos){
 						this.winner(this.playersInHand[this.raisedBy], this.pot);
 						this.finishHand();
+						break;
 					}
 				}
 			}
@@ -238,19 +242,30 @@ class Hand{
 			// console.log("Assigning Turn : " + pos);
 			this.playerIndex = pos;
 		}
-
-		// setTimeout(this.autoFold.bind(this), 2000, this.playersInHand[this.playerIndex], this.turnNumber);
+		// console.log("Setting Timeout");
+		// setTimeout(this.autoFold.bind(this), 1000, this.playersInHand[this.playerIndex], this.turnNumber, 0, 2000);
 	}
 
-	autoFold(player, turnNumber){
-		// console.log("Folding for player " + player.username + " " + turnNumber + " : " + this.turnNumber);
-		if(this.turnNumber == turnNumber){
-			this.fold(player);
-			// console.log("Folding")
+	autoFold(player, turnNumber, cumulative, maximum){
+		if(this.isFinished) return;
+		if(cumulative < maximum){
+			if(this.turnNumber != turnNumber) return;
+			setTimeout(this.autoFold.bind(this), 1000, player, turnNumber, cumulative + 1000, maximum);
+			var percent = (maximum - cumulative) * 1.0 / maximum;
+			this.agent.emit('time', {time : percent, activeSeat : this.playerIndex});
+			// console.log({player : player.seat, time : percent, activePlayer : this.playerIndex});
+		}
+		else{
+			console.log("Folding for player " + player.username + " " + turnNumber + " : " + this.turnNumber);
+			if(this.turnNumber == turnNumber){
+				this.fold(player);
+				console.log("Auto Folding");
+			}
 		}
 	}
 
 	getNextPlayer(pos){
+		if(this.isFinished) return;
 		// console.log("Position : " + pos);
 		var start = (pos+1) % this.maxPlayerCount;
 		while(true){

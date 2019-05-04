@@ -42,6 +42,11 @@ app.get('/', (req, res) => {
 	// fun();
 	res.sendFile(path.resolve(__dirname,'..','dist','index.html'))
 
+});
+
+app.get("/hiii", (req, res) => {
+	res.json({success : 1});
+	console.log("received");
 })
 
 //TODO save all connections to connections table
@@ -84,11 +89,11 @@ io.on('connection', (socket) => {
 	//TODO if player email is invalid don't let if play but give current game state
 	socket.on('addPlayer', ({email, name, pic}, gameState) => {
 
-		console.log("Adding new connection");
+		// console.log("Adding new connection");
 		
 		validatePlayer(email, function(result) {
 			var p = new Player(result.PlayerID, result.Email, result.UserName, result.Balance, result.AccountName, result.PvtKey, result.Index, socket, true);
-			console.log(result);
+			// console.log(result);
 			var playerData = table.getPublicPlayerData()
 			var reply = {
 				players : playerData,
@@ -102,7 +107,7 @@ io.on('connection', (socket) => {
 					email : result.Email
 				}
 			}
-			console.log(reply);
+			// console.log(reply);
 			gameState(reply);
 		}, function(fail) {
 			console.log("No player found");
@@ -110,7 +115,7 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('seatPlayer', ({seatPosition, playerData}, callback) => {
-		if(table.seatPlayer(seatPosition, new Player(playerData.playerID, playerData.username, playerData.balance, playerData.accountName, playerData.pvtKey, 0, socket, true, playerData.pic))){
+		if(table.seatPlayer(seatPosition, new Player(playerData.playerID, playerData.email, playerData.username, playerData.balance, playerData.accountName, playerData.pvtKey, 0, socket, true, playerData.pic))){
 			// The player was seated on the table
 			// console.log("HERE");
 			// console.log(table.playersOnTable[seatPosition]);
@@ -120,13 +125,11 @@ io.on('connection', (socket) => {
 				seat : 5,
 				balance : table.playersOnTable[seatPosition].balance
 			}
-			console.log(table.getState());
+			// console.log(table.getState());
 			callback(table.getState());
 		}
 		else{
-			// The player couldn't be seated
-			// console.log(seatPosition, playerData);
-			// seatPlayer
+			
 		}
 	});
 
@@ -196,22 +199,12 @@ function start(table){
 	var player3 = new Player(3, "c@a.com", "Shuvam", 3000, "abcde", "xyz", 2, null, true, ".");
 	var player4 = new Player(4, "d@a.com", "Agarwal", 3000, "abcde", "xyz", 3, null, true, ".");
 	var player5 = new Player(5, "e@a.com", "Piyush", 3000, "abcde", "xyz", 4, null, true, ".");
-	// var player6 = new Player("6", 3000, "abcde", "xyz", 5, null, true);
-
-
-	// var hand = new Hand(0, );
-	// var table = new Table([], 10, 2000, 4000, io);
 
 	table.seatPlayer(0, player1);
 	table.seatPlayer(1, player2);
 	table.seatPlayer(2, player3);
 	table.seatPlayer(3, player4);
 	table.seatPlayer(4, player5);
-
-	// for(var key in table.seats){
-	// 	if(table.seats[key] != -1)
-	// 		console.log(key, table.seats[key]);
-	// }
 
 	table.startHand();
 
@@ -223,5 +216,5 @@ function start(table){
 
 	table.getPlayerSeat(3);
 
-	console.log(table.getState());
+	// console.log(table.getState());
 }
