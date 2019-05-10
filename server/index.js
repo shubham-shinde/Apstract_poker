@@ -198,17 +198,21 @@ function validatePlayer(email, successCallback, failureCallback){
 }
 
 function start(table){
-	// var player1 = new Player(6, "a@a.com", "Shubham", 3000, "abcde", "xyz", 0, null, true, ".");
-	// var player2 = new Player(2, "b@a.com", "Shinde", 3000, "abcde", "xyz", 1, null, true, ".");
-	// var player3 = new Player(3, "c@a.com", "Shuvam", 3000, "abcde", "xyz", 2, null, true, ".");
-	// var player4 = new Player(4, "d@a.com", "Agarwal", 3000, "abcde", "xyz", 3, null, true, ".");
-	// var player5 = new Player(5, "e@a.com", "Piyush", 3000, "abcde", "xyz", 4, null, true, ".");
+	var player1 = new Player(6, "a@a.com", "Shubham", 3000, "abcde", "xyz", 0, null, true, ".");
+	var player2 = new Player(2, "b@a.com", "Shrey", 3000, "abcde", "xyz", 1, null, true, ".");
+	var player3 = new Player(3, "c@a.com", "Ameta", 3000, "abcde", "xyz", 2, null, true, ".");
+	var player4 = new Player(4, "d@a.com", "Shuvam", 3000, "abcde", "xyz", 3, null, true, ".");
+	var player5 = new Player(5, "e@a.com", "Piyush", 3000, "abcde", "xyz", 4, null, true, ".");
 
-	// table.seatPlayer(0, player1);
-	// table.seatPlayer(1, player2);
-	// table.seatPlayer(2, player3);
-	// table.seatPlayer(3, player4);
-	// table.seatPlayer(4, player5);
+	ContractActions.getCurrentPlayer(1).then((data) => {
+		console.log(data);
+	});
+
+	// ContractActions.creategame(0)
+
+	// ContractActions.startGame(10).then((data) => {
+	// 	console.log(data);
+	// })
 
 	// table.startHand();
 
@@ -217,9 +221,15 @@ function start(table){
 	// table.currentHand.fold(player4);
 	// table.currentHand.fold(player5);
 
-	// ContractActions.creategame(0, 8, 4).then((data) => {
+	// ContractActions.creategame(8, 4, 10).then((data) => {
 	// 	console.log(data);
 	// });
+
+	// table.seatPlayer(0, player1);
+	// table.seatPlayer(1, player2);
+	// table.seatPlayer(2, player3);
+	// table.seatPlayer(3, player4);
+	// table.seatPlayer(4, player5);
 
 	// ContractActions.
 

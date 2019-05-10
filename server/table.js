@@ -74,6 +74,10 @@ class Table{
 	seatPlayer(seatPosition, player){
 		if(this.seats[seatPosition] == -1){
 
+			contract.seatPlayer(seatPosition, player.balance).then((data) => {
+				console.log(data);
+			})
+
 			for(var key in this.playersOnTable){
 				if(this.playersOnTable[key].username == player.username) {
 					console.log("Already on table");

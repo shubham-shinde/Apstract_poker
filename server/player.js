@@ -1,3 +1,5 @@
+// import * as ContractActions from './contract';
+
 class Player{
 	constructor(playerID, email, username, balance, accountName, pvtKey, index, connection, active, displayPic){
 		this.playerID = playerID;

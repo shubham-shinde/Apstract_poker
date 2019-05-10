@@ -1,7 +1,7 @@
 import eos from "./eos";
 //TODO : Call functions from smart contracts
-var ACTOR = 'zqectjpthygu'
-var KEY = '5KPnCxdpDZ4mEQPnWKxhSDVagde572VH5kMzCn97bacM9Y9ir6d'
+var ACTOR = 'eospokerabcd'
+var KEY = '5JKNcMkLbTWrVZpuwbSLJv9K2xxkqgN2kQr3Hjsd3kKRUJyVLB2'
 var ContractConnection = {
     EOS_CONTRACT_NAME: ACTOR,
     EOS_HTTP_ENDPOINT: "http://jungle2.cryptolions.io:80",
@@ -28,9 +28,9 @@ export async function rmplayer(playerId){
         return false;
     }
 }
-export async function seatPlayer(playerId, seatPosition){
+export async function seatPlayer(seatPosition, buyIn){
     try {
-        await eos.makeAction(ACTOR, KEY, 'seatplayer', {s: ACTOR, playerId, seatPosition} , ContractConnection)
+        await eos.makeAction(ACTOR, KEY, 'seatplayer', {s: ACTOR, seatPosition, buyIn} , ContractConnection)
         return true;
     }
     catch(err) {
@@ -39,9 +39,9 @@ export async function seatPlayer(playerId, seatPosition){
     }
 }
 
-export async function creategame(gameId, maxPlayers, rakePercentage){
+export async function creategame(maxPlayers, rakePercentage, smallBlind){
     try {
-        await eos.makeAction(ACTOR, KEY, 'creategame', {s: ACTOR, gameId, maxPlayers, rakePercentage} , ContractConnection)
+        await eos.makeAction(ACTOR, KEY, 'creategame', {s: ACTOR, maxPlayers, rakePercentage, smallBlind} , ContractConnection)
         return true;
     }
     catch(err) {
