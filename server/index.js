@@ -204,9 +204,17 @@ function start(table){
 	var player4 = new Player(4, "d@a.com", "Shuvam", 3000, "abcde", "xyz", 3, null, true, ".");
 	var player5 = new Player(5, "e@a.com", "Piyush", 3000, "abcde", "xyz", 4, null, true, ".");
 
-	ContractActions.getCurrentPlayer(1).then((data) => {
-		console.log(data);
-	});
+	// table.startGame();
+
+	table.initialize();
+
+	// table.startHand();
+	// ContractActions.getHandData(0).then(console.log)
+	// player2.call();
+
+	// ContractActions.getCurrentPlayer(1).then((data) => {
+	// 	console.log(data);
+	// });
 
 	// ContractActions.creategame(0)
 
@@ -221,6 +229,8 @@ function start(table){
 	// table.currentHand.fold(player4);
 	// table.currentHand.fold(player5);
 
+	// table.startGame();
+
 	// ContractActions.creategame(8, 4, 10).then((data) => {
 	// 	console.log(data);
 	// });
@@ -234,6 +244,8 @@ function start(table){
 	// ContractActions.
 
 	// table.getPlayerSeat(3);
+
+	// ContractActions
 
 	// ContractActions.seatPlayer(4, 3).then((data)=>{
 	// 	console.log(data);

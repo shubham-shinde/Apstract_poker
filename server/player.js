@@ -1,4 +1,4 @@
-// import * as ContractActions from './contract';
+import * as ContractActions from './contract';
 
 class Player{
 	constructor(playerID, email, username, balance, accountName, pvtKey, index, connection, active, displayPic){
@@ -23,7 +23,7 @@ class Player{
 	}
 
 	placeBet(amount){
-		// send action
+		// ContractActions.
 	}
 
 	raise(amount){
@@ -34,8 +34,8 @@ class Player{
 		});
 	}
 
-	check(){
-		// send action
+	check(handID){
+		ContractActions.actionCheck(this.playerID, handID).then(console.log);
 	}
 
 	call(){

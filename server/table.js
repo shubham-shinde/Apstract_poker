@@ -3,7 +3,7 @@ import socket from 'socket.io';
 var Hand = require('./hand.js')
 var Player = require('./player.js')
 
-var abcd = -1;
+// var abcd = -1;
 
 
 class Table{
@@ -146,6 +146,50 @@ class Table{
 		else{
 			setTimeout(this.currentHandCheck.bind(this), 1000);
 		}
+	}
+
+	startGame(){
+		contract.startGame(0).then(console.log);
+	}
+
+	async initialize(){
+		var handID = await contract.getCurrentHand();
+		var handData = await contract.getHandData(handID);
+		var playerList = {0 : -1 , 1 : -1 , 2 : -1 , 3 : -1 , 4 : -1 , 5 : -1 , 6 : -1 , 7 : -1 , 8 : -1};
+		var playerData = await contract.getPlayerData();
+		
+		for(var key in playerData){
+			if(playerData.hasOwnProperty(key)){
+				const element = playerData[key];
+				var pd = await this.getDataFromDB(element.playerId);
+				var p = new Player(pd.playerID, pd.email, pd.username, element.currentChips, pd.accountName, pd.pvtKey, pd.index, pd.connection, pd.active, pd.displayPic);
+				playerList[element.playerId] = p;
+				p.seatPlayer(element.playerId);
+			}
+		}
+
+		for (var key in handData.playersInHand){
+			playerList[key].currentBet = handData.playersBetAmount[key];
+		}
+		console.log(playerList);
+		this.currentHand = new Hand(handID, playerList, handData.dealerPosition, this.agent, 10);
+		this.currentHand.applyHand(handData); 
+	}
+
+	async getDataFromDB(playerID){
+		var reply = {
+			playerID,
+			email : "a@a.com",
+			username : "sp56783",
+			balance : 3000,
+			accountName : "abcde",
+			pvtKey : "1234",
+			index : playerID,
+			connection : null,
+			active : true,
+			displayPic : "."
+		};
+		return reply;
 	}
 }
 

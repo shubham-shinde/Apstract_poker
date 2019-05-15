@@ -1,7 +1,7 @@
 import eos from "./eos";
 //TODO : Call functions from smart contracts
-var ACTOR = 'eospokerabcd'
-var KEY = '5JKNcMkLbTWrVZpuwbSLJv9K2xxkqgN2kQr3Hjsd3kKRUJyVLB2'
+var ACTOR = 'eospoker1234'
+var KEY = '5KGf9fnZ6auaSuwNqCBT2NARu5T4GSCAyCKbLsGfsUvW4fkV7uM'
 var ContractConnection = {
     EOS_CONTRACT_NAME: ACTOR,
     EOS_HTTP_ENDPOINT: "http://jungle2.cryptolions.io:80",
@@ -204,5 +204,59 @@ export async function getCurrentPlayer(handId){
         
     } catch (error) {
         return false;
+    }
+}
+
+export async function actionCheck(playerID, handID){
+    try{
+        await eos.makeAction(ACTOR, KEY, 'actioncheck', {}, ContractConnection)
+        return true;
+    }
+    catch(error){
+        console.log(error);
+        return false;
+    }
+}
+
+export async function getHandData(handId){
+    try {
+        var data = await eos.getTableRows(ContractConnection, 'hand');
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                const ele = data[key];
+                if(ele.handId == handId) return ele
+            }
+        }
+        return false;
+    }
+    catch(err) {
+        return false;
+    }
+}
+
+export async function getCurrentHand(){
+    try {
+        var data = await eos.getTableRows(ContractConnection, 'hand');
+        var max = -1;
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                const ele = data[key];
+                if(max < ele.handId) max = ele.handId;
+            }
+        }
+        return max;
+    }
+    catch(err) {
+        return -1;
+    }
+}
+
+export async function getPlayerData(){
+    try {
+        var data = await eos.getTableRows(ContractConnection, 'players');
+        return data;
+    }
+    catch(err) {
+        return -1;
     }
 }

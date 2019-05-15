@@ -22,6 +22,15 @@ class Hand{
 		this.isFinished = false;
 	}
 
+	applyHand(handData){
+		this.hand_id = handData.handId;
+		this.dealerPos = handData.dealerPosition;
+		this.raisedBy = handData.raisedBy;
+		this.pot = handData.pot;
+		this.state = handData.state;
+		
+	}
+
 	startHand(){
 		// getnextPlayer(this.dealerPos);
 
@@ -181,6 +190,7 @@ class Hand{
 		if(this.playerIndex != player.seat) return;
 		if(this.currentBet != player.currentBet) return;
 		// console.log("Checked");
+		player.check(this.handID);
 		this.agent.emit('check', {seatID : player.seat});
 		this.assignTurn(this.getNextPlayer(player.seat));
 	}
