@@ -1,12 +1,16 @@
 import eos from "./eos";
 //TODO : Call functions from smart contracts
-var ACTOR = 'eospoker1234'
+var ACTOR = 'eospoker1112'
 var KEY = '5KGf9fnZ6auaSuwNqCBT2NARu5T4GSCAyCKbLsGfsUvW4fkV7uM'
 var ContractConnection = {
     EOS_CONTRACT_NAME: ACTOR,
     EOS_HTTP_ENDPOINT: "http://jungle2.cryptolions.io:80",
     KEY: KEY
 }
+
+//public_key = EOS5Z8vJHCK9f1SgT2DJiz79KM9pgXQ7pZ7TfdJ9hMe33GoVNXGKA;
+
+var gameId = 0;
 
 export async function addPlayer (playerAccountName, playerId, buyIn){
     try {
@@ -20,7 +24,8 @@ export async function addPlayer (playerAccountName, playerId, buyIn){
 }
 export async function rmplayer(playerId){
     try {
-        await eos.makeAction(ACTOR, KEY, 'rmplayer', {s: ACTOR, playerId} , ContractConnection)
+        var x = await eos.makeAction(ACTOR, KEY, 'rmplayer', {s: ACTOR, playerId} , ContractConnection)
+        console.log(true);
         return true;
     }
     catch(err) {
@@ -30,8 +35,19 @@ export async function rmplayer(playerId){
 }
 export async function seatPlayer(seatPosition, buyIn){
     try {
-        await eos.makeAction(ACTOR, KEY, 'seatplayer', {s: ACTOR, seatPosition, buyIn} , ContractConnection)
+        await eos.makeAction(ACTOR, KEY, 'seatplayer', {s: ACTOR, seatPosition, buyIn, gameId} , ContractConnection)
         return true;
+    }
+    catch(err) {
+        console.log(err);
+        return false;
+    }
+}
+
+export async function removePlayer(playerId){
+    try {
+        await eos.makeAction(ACTOR, KEY, 'rmplayer', {s: ACTOR, playerId} , ContractConnection)
+        return true
     }
     catch(err) {
         console.log(err);
@@ -50,9 +66,9 @@ export async function creategame(maxPlayers, rakePercentage, smallBlind){
     }
 }
 
-export async function startGame(smallBlind){
+export async function startGame(gameId){
     try {
-        await eos.makeAction(ACTOR, KEY, 'startgame', {s: ACTOR, smallBlind} , ContractConnection)
+        await eos.makeAction(ACTOR, KEY, 'startgame', {s: ACTOR, gameId} , ContractConnection)
         return true;
     }
     catch(err) {
@@ -60,9 +76,9 @@ export async function startGame(smallBlind){
         return false;
     }
 }
-export async function startHand(dealerPosition, currentPlayer, smallBlind, playersOnTable, playersInHand){
+export async function removeGame(gameId){
     try {
-        await eos.makeAction(ACTOR, KEY, 'starthand', {s: ACTOR, dealerPosition, currentPlayer, smallBlind, playersOnTable, playersInHand} , ContractConnection)
+        await eos.makeAction(ACTOR, KEY, 'rmgame', {s: ACTOR, gameId} , ContractConnection)
         return true
     }
     catch(err) {
@@ -70,39 +86,50 @@ export async function startHand(dealerPosition, currentPlayer, smallBlind, playe
         return false;
     }
 }
+// export async function startHand(dealerPosition, currentPlayer, smallBlind, playersOnTable, playersInHand){
+//     try {
+//         await eos.makeAction(ACTOR, KEY, 'starthand', {s: ACTOR, dealerPosition, currentPlayer, smallBlind, playersOnTable, playersInHand} , ContractConnection)
+//         return true
+//     }
+//     catch(err) {
+//         console.log(err);
+//         return false;
+//     }
+// }
 export async function dealCards(handId){
     try {
         await eos.makeAction(ACTOR, KEY, 'dealcards', {s: ACTOR, handId} , ContractConnection)
-        return true
+        return true;
     }
     catch(err) {
         console.log(err);
         return false;
     }
 }
-export async function call(playerId, handId, handSeatId){
+export async function call(playerId, handId){
     try {
-        await eos.makeAction(ACTOR, KEY, 'actioncall', {s: ACTOR, playerId, handId, handSeatId} , ContractConnection)
-        return true
+        console.log("Action Call for playerID : " + playerId + ", handId : " + handId);
+        await eos.makeAction(ACTOR, KEY, 'actioncall', {s: ACTOR, playerId, handId} , ContractConnection)
+        return true;
     }
     catch(err) {
         console.log(err);
         return false;
     }
 }
-export async function bet(playerId, handId, handSeatId, betValue){
+export async function bet(playerId, handId, betValue){
     try {
         await eos.makeAction(ACTOR, KEY, 'actionbet', {s: ACTOR, playerId, handId, handSeatId, betValue} , ContractConnection)
-        return true
+        return true;
     }
     catch(err) {
         console.log(err);
         return false;
     }
 }
-export async function raise(playerId, handId, handSeatId, raiseValue){
+export async function raise(playerId, handId, raiseValue){
     try {
-        await eos.makeAction(ACTOR, KEY, 'actionraise', {s: ACTOR, playerId, handId, handSeatId, raiseValue} , ContractConnection)
+        await eos.makeAction(ACTOR, KEY, 'actionraise', {s: ACTOR, playerId, handId, raiseValue} , ContractConnection)
         return true
     }
     catch(err) {
@@ -110,7 +137,7 @@ export async function raise(playerId, handId, handSeatId, raiseValue){
         return false;
     }
 }
-export async function allin(playerId, handId, handSeatId){
+export async function allin(playerId, handId){
     try {
         await eos.makeAction(ACTOR, KEY, 'actionallin', {s: ACTOR, playerId, handId, handSeatId} , ContractConnection)
         return true
@@ -120,9 +147,9 @@ export async function allin(playerId, handId, handSeatId){
         return false;
     }
 }
-export async function fold(playerId, handId, handSeatId){
+export async function fold(playerId, handId){
     try {
-        await eos.makeAction(ACTOR, KEY, 'actionfold', {s: ACTOR, playerId, handId, handSeatId} , ContractConnection)
+        await eos.makeAction(ACTOR, KEY, 'actionfold', {s: ACTOR, playerId, handId} , ContractConnection)
         return true
     }
     catch(err) {
@@ -207,9 +234,9 @@ export async function getCurrentPlayer(handId){
     }
 }
 
-export async function actionCheck(playerID, handID){
+export async function actionCheck(playerId, handId){
     try{
-        await eos.makeAction(ACTOR, KEY, 'actioncheck', {}, ContractConnection)
+        await eos.makeAction(ACTOR, KEY, 'actioncheck', {playerId, handId}, ContractConnection)
         return true;
     }
     catch(error){

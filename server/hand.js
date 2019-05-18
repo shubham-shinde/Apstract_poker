@@ -1,8 +1,11 @@
+import * as contract from './contract';
+import socket from 'socket.io';
+
 var Player = require("./player.js")
 var Card = require("./card.js")
 
 class Hand{
-	constructor(hand_id, playersInHand, dealerPos, agent, smallBlind){
+	constructor(hand_id, playersInHand, dealerPos, agent, smallBlind, onBlockchain){
 		this.hand_id = hand_id;
 		this.player_list = [];
 		this.playersInHand = playersInHand;
@@ -20,6 +23,7 @@ class Hand{
 		this.smallBlind = smallBlind;
 		this.turnNumber = 0;
 		this.isFinished = false;
+		this.onBlockchain = onBlockchain;
 	}
 
 	applyHand(handData){
@@ -28,7 +32,12 @@ class Hand{
 		this.raisedBy = handData.raisedBy;
 		this.pot = handData.pot;
 		this.state = handData.state;
-		
+		this.playerIndex = handData.currentPlayer;
+
+		// console.log(handData);
+
+		if(handData.state==0) this.state = -1;
+		// this.player
 	}
 
 	startHand(){
@@ -69,7 +78,14 @@ class Hand{
 		//getDataFromBC
 		if(this.state != 2) return;
 
-		this.agent.emit('message', {card1 : "cA", card2 : 'dA', card3 : 'cT'});
+		if(this.onBlockchain){
+			contract.getFlop(this.hand_id).then((data) => {
+				this.agent.emit('flop', {cards : ["cA", "dA", "cT"]});
+			})
+		}
+		else{
+			this.agent.emit('message', {card1 : "cA", card2 : 'dA', card3 : 'cT'});
+		}
 
 
 		this.currentBet = 0;
@@ -127,10 +143,10 @@ class Hand{
 	}
 
 	finishHand(){
-		console.log("Hand Finished");
+		// console.log("Hand Finished");
 
-		this.agent.emit('handfinished', {success : 1});
-		this.isFinished = true;
+		// this.agent.emit('handfinished', {success : 1});
+		// this.isFinished = true;
 	}
 
 	getPlayerAtPos(pos){
@@ -140,23 +156,29 @@ class Hand{
 		throw "Player at Position " + pos + " not found";
 	}
 
-	placeBet(amount, player){
+	async placeBet(player, amount){
 		//update min raise
-		if(this.playerIndex != player.seat) return;
-		if(amount < minRaise) return;
+		// if(this.playerIndex != player.seat) return;
+		// if(amount < minRaise) return;
 
 		this.agent.emit('raise', {seatID : player.seat, value : amount});
 
 		this.pot += amount;
+		if(this.onBlockchain)
+		await player.placeBet(amount, this.hand_id);
+
 		this.player_list.clear();
 		this.player_list.push(player);
 	}
 
-	raise(amount, player){
+	async raise(player, amount){
 		//update min raise
-		if(this.playerIndex != player.seat) return;
+		// if(this.playerIndex != player.seat) return;
 		if(amount < this.minRaise) return;
 		
+		if(this.onBlockchain)
+		await player.raise(amount, this.hand_id);
+
 		this.agent.emit('raise', {seatID : player.seat, value : amount});
 		
 		this.minRaise = amount - this.currentBet + amount;
@@ -164,33 +186,48 @@ class Hand{
 		this.pot += amount;
 	}
 
-	call(player){
-		if(this.playerIndex != player.seat) return;
+	async call(player){
+		console.log("Player acting = " + player.seat);
+
+		// if(this.playerIndex != player.seat) return;
+
+		// console.log("In currentHand.call");
+		// console.log("onBlockchain = " + this.onBlockchain);
+
+		if(this.onBlockchain){
+			await player.call(this.hand_id);
+		}
 
 		this.agent.emit('call', {seatID : player.seat});
 		
 		this.pot += this.currentBet - player.currentBet;
 		player.balance -= (this.currentBet - player.currentBet);
 		this.assignTurn(this.getNextPlayer(player.seat));
+		return true;
 		// player_list.push(player);
 	}
 
-	fold(player){
-		if(this.playerIndex != player.seat) return;
+	async fold(player){
+		// if(this.playerIndex != player.seat) return;
 		// console.log("Here");
-		player.fold();
-		console.log("Folding for player " + player.username);
+		if(this.onBlockchain){
+			await player.fold(this.hand_id);
+		}
+		// console.log("Folding for player " + player.username);
 		this.agent.emit('fold', {seatID : player.seat});
 		// this.playersInHand[player.seat] = -1;
 		this.assignTurn(this.getNextPlayer(player.seat));
+		return true;
 		// console.log(this.raisedBy);
 	}
 
-	check(player){
-		if(this.playerIndex != player.seat) return;
-		if(this.currentBet != player.currentBet) return;
+	async check(player){
+		// if(this.playerIndex != player.seat) return;
+		// if(this.currentBet != player.currentBet) return;
 		// console.log("Checked");
-		player.check(this.handID);
+		if(this.onBlockchain){
+			await player.check(this.handID);
+		}
 		this.agent.emit('check', {seatID : player.seat});
 		this.assignTurn(this.getNextPlayer(player.seat));
 	}

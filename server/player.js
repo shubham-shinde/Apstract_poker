@@ -15,39 +15,39 @@ class Player{
 		this.connection = connection;
 		this.active = active;
 		this.inHand = false;
-		this.seat = -1;
+		this.seat = playerID;
 	}
 
 	getBalance(){
 		return this.balance;
 	}
 
-	placeBet(amount){
-		// ContractActions.
+	async placeBet(amount, handID){
+		await ContractActions.bet(this.playerId, handID, amount);
 	}
 
-	raise(amount){
-		//send action
-		getFromBlockchain(amount, function(result) {
-			currentBet += result.amount;
-			balance -= result.amount;
-		});
+	async raise(amount, handID){
+		// console.log("Amount : " + amount + ", handID : " + handID);
+		await ContractActions.raise(this.playerID, handID, amount);
 	}
 
-	check(handID){
-		ContractActions.actionCheck(this.playerID, handID).then(console.log);
+	async check(handID){
+		await ContractActions.actionCheck(this.playerID, handID);
 	}
 
-	call(){
+	async call(handID){
 		// send action
+		await ContractActions.call(this.playerID, handID);
 	}
 	
-	allin(){
+	async allin(handID){
 		// send action
+		await ContractActions.allIn(this.playerID, handID)
 	}
 
-	fold(){
+	async fold(handID){
 		this.inHand = false;
+		await ContractActions.fold(this.playerID, handID);
 	}
 
 	getHoleCards(card1, card2){

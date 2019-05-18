@@ -7,7 +7,7 @@ var Player = require('./player.js')
 
 
 class Table{
-	constructor(playersOnTable, smallBlind, minBuyIn, maxBuyIn, io){
+	constructor(playersOnTable, smallBlind, minBuyIn, maxBuyIn, io, onBlockchain){
 		this.playersOnTable = {0 : -1 , 1 : -1 , 2 : -1 , 3 : -1 , 4 : -1 , 5 : -1 , 6 : -1 , 7 : -1 , 8 : -1};
 		this.smallBlind = smallBlind;
 		this.minBuyIn = minBuyIn;
@@ -17,6 +17,7 @@ class Table{
 		this.seats = {0 : -1 , 1 : -1 , 2 : -1 , 3 : -1 , 4 : -1 , 5 : -1 , 6 : -1 , 7 : -1 , 8 : -1};
 		this.currentHand = null; // Read data from contract
 		this.agent = io;
+		this.onBlockchain = onBlockchain;
 	}
 
 	addPlayer(player){
@@ -61,7 +62,7 @@ class Table{
 		/*Pass data to the constructor to initialize the hand*/
 		var handID = 0;
 		if(this.currentHand) handID = this.currentHand.handID;
-		this.currentHand = new Hand(handID + 1, playerList, 0, this.agent, 10);
+		this.currentHand = new Hand(handID + 1, playerList, 0, this.agent, 10, this.onBlockchain);
 		this.currentHand.startHand();
 
 		this.agent.emit('startHand', {handID : this.currentHand.handID});
@@ -71,12 +72,11 @@ class Table{
 		setTimeout(this.currentHandCheck.bind(this), 1000);
 	}
 
-	seatPlayer(seatPosition, player){
+	async seatPlayer(seatPosition, player){
 		if(this.seats[seatPosition] == -1){
-
-			contract.seatPlayer(seatPosition, player.balance).then((data) => {
-				console.log(data);
-			})
+			if(this.onBlockchain){
+				var d = await contract.seatPlayer(seatPosition, player.balance)
+			}
 
 			for(var key in this.playersOnTable){
 				if(this.playersOnTable[key].username == player.username) {
@@ -90,9 +90,7 @@ class Table{
 			player.seatPlayer(seatPosition);
 			return true;
 		}
-		else{
-			return false;
-		}
+		return false;
 	}
 
 	getState(){
@@ -101,7 +99,6 @@ class Table{
 			handData : this.currentHand.getPublicData()
 		}
 		return reply;
-		// return all the data for the game. 
 	}
 
 	getPublicPlayerData(){
@@ -148,11 +145,20 @@ class Table{
 		}
 	}
 
-	startGame(){
-		contract.startGame(0).then(console.log);
+	async startGame(){
+		if(this.onBlockchain)
+		var x = await contract.startGame(0);
+		console.log(x)
+	}
+
+	async createGame(){
+		if(this.onBlockchain)
+		var x = await contract.creategame(8, 4, 10);
+		console.log(x);
 	}
 
 	async initialize(){
+		if(!this.onBlockchain) return;
 		var handID = await contract.getCurrentHand();
 		var handData = await contract.getHandData(handID);
 		var playerList = {0 : -1 , 1 : -1 , 2 : -1 , 3 : -1 , 4 : -1 , 5 : -1 , 6 : -1 , 7 : -1 , 8 : -1};
@@ -171,9 +177,10 @@ class Table{
 		for (var key in handData.playersInHand){
 			playerList[key].currentBet = handData.playersBetAmount[key];
 		}
-		console.log(playerList);
-		this.currentHand = new Hand(handID, playerList, handData.dealerPosition, this.agent, 10);
-		this.currentHand.applyHand(handData); 
+		// console.log(playerList);
+		this.currentHand = new Hand(handID, playerList, handData.dealerPosition, this.agent, 10, true);
+		this.currentHand.applyHand(handData);
+		return true;
 	}
 
 	async getDataFromDB(playerID){
@@ -190,6 +197,23 @@ class Table{
 			displayPic : "."
 		};
 		return reply;
+	}
+
+	async call(player){
+		if(this.onBlockchain){
+			// console.log("In table.call")
+			await this.currentHand.call(player);
+		}
+	}
+
+	async raise(player, amount){
+		if(this.onBlockchain)
+		await this.currentHand.raise(player, amount);
+	}
+
+	async fold(player){
+		if(this.onBlockchain)
+		await this.currentHand.fold(player);
 	}
 }
 

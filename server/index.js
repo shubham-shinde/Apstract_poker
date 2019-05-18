@@ -68,7 +68,8 @@ var chatHandler = new ChatHandler(io);
 // console.log(io + " IO");
 
 // var game = new Game();
-var table = new Table([], 10, 2000, 4000, io);
+var table = new Table([], 10, 2000, 4000, io, true);
+// table.initialize();
 // table.setSocket(io);
 
 var players = [];
@@ -197,16 +198,95 @@ function validatePlayer(email, successCallback, failureCallback){
 	});
 }
 
-function start(table){
-	var player1 = new Player(6, "a@a.com", "Shubham", 3000, "abcde", "xyz", 0, null, true, ".");
-	var player2 = new Player(2, "b@a.com", "Shrey", 3000, "abcde", "xyz", 1, null, true, ".");
-	var player3 = new Player(3, "c@a.com", "Ameta", 3000, "abcde", "xyz", 2, null, true, ".");
-	var player4 = new Player(4, "d@a.com", "Shuvam", 3000, "abcde", "xyz", 3, null, true, ".");
-	var player5 = new Player(5, "e@a.com", "Piyush", 3000, "abcde", "xyz", 4, null, true, ".");
+async function start(table){
 
-	// table.startGame();
+	var player0 = new Player(0, "a@a.com", "Shubham", 3000, "abcde", "xyz", 0, null, true, ".");
+	var player1 = new Player(1, "b@a.com", "Shrey", 3000, "abcde", "xyz", 1, null, true, ".");
+	var player2 = new Player(2, "c@a.com", "Ameta", 3000, "abcde", "xyz", 2, null, true, ".");
+	var player3 = new Player(3, "d@a.com", "Shuvam", 3000, "abcde", "xyz", 3, null, true, ".");
+	var player4 = new Player(4, "e@a.com", "Piyush", 3000, "abcde", "xyz", 4, null, true, ".");
 
-	table.initialize();
+	await ContractActions.removeGame(0);
+	await ContractActions.removeGame(1);
+	// await ContractActions.removeGame(2);
+	// await ContractActions.removeGame(3);
+	// await ContractActions.removeGame(4);
+	// await ContractActions.removeGame(5);
+
+	await table.createGame();
+
+	await ContractActions.rmplayer(0);
+	await ContractActions.rmplayer(1);
+	await ContractActions.rmplayer(2);
+	await ContractActions.rmplayer(3);
+	await ContractActions.rmplayer(4);
+	// await ContractActions.rmplayer(5);
+	// await ContractActions.rmplayer(6);
+	// await ContractActions.rmplayer(7);
+	// await ContractActions.rmplayer(8);
+
+
+	await table.seatPlayer(0, player0);
+	await table.seatPlayer(1, player1);
+	await table.seatPlayer(2, player2);
+	await table.seatPlayer(3, player3);
+	await table.seatPlayer(4, player4);
+	
+
+	await table.startGame(0);
+
+	await table.initialize();
+
+	// console.log("Playing out the hand now");
+
+	await table.call(player3);
+	await table.call(player4);
+	await table.raise(player0, 60);
+	await table.call(player1);
+	await table.fold(player2);
+	await table.fold(player3);
+	await table.call(player4);
+
+	// FLOP OPENS
+
+	function timeout(ms) {
+	    return new Promise(resolve => setTimeout(resolve, ms));
+	}
+	
+	console.log("Flop has been opened");
+
+	await timeout(2000);
+
+	await table.raise(player1, 110);
+	await table.fold(player4);
+	await table.raise(player0, 390);
+	await table.fold(player1);
+	
+
+	// // await table.initialize();
+
+	// // await setTimeout(()=>{console.log("Initialized")}, 2000);
+
+	// await table.call(player4);
+	// // await setTimeout(()=>{console.log("Initialized")}, 2000);
+	// await table.call(player5);
+	// // await setTimeout(()=>{console.log("Initialized")}, 2000);
+	// // console.log("------------------------" + player1.playerID);
+	// await table.raise(player1, 60);
+	// // await setTimeout(()=>{console.log("Initialized")}, 2000);
+	// await table.call(player2);
+	// // await setTimeout(()=>{console.log("Initialized")}, 2000);
+	// await table.fold(player3);
+	// // await setTimeout(()=>{console.log("Initialized")}, 2000);
+	// await table.fold(player4);
+	// // await setTimeout(()=>{console.log("Initialized")}, 2000);
+	// await table.call(player5);
+	// // await setTimeout(()=>{console.log("Initialized")}, 2000);
+	// // table.startGame();
+
+	// await table.raise(player2, 110);
+
+	// table.initialize();
 
 	// table.startHand();
 	// ContractActions.getHandData(0).then(console.log)

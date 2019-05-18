@@ -33,6 +33,7 @@
     "xml-loader": "^1.2.1"
   },
   "dependencies": {
+    "aes-js": "^3.1.2",
     "eosjs": "^20.0.0-beta3",
     "html-loader": "^0.5.5",
     "mysql": "^2.17.1",
