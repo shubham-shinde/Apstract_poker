@@ -76,6 +76,7 @@ var players = [];
 var connections = [];
 
 start(table);
+// table.initialize();
 
 io.on('connection', (socket) => {
 	console.log(socket.id);
@@ -207,23 +208,25 @@ async function start(table){
 	var player4 = new Player(4, "e@a.com", "Piyush", 3000, "abcde", "xyz", 4, null, true, ".");
 
 	await ContractActions.removeGame(0);
-	await ContractActions.removeGame(1);
-	// await ContractActions.removeGame(2);
-	// await ContractActions.removeGame(3);
-	// await ContractActions.removeGame(4);
-	// await ContractActions.removeGame(5);
+	// // await ContractActions.removeGame(1);
+	// // await ContractActions.removeGame(2);
+	// // await ContractActions.removeGame(3);
+	// // await ContractActions.removeGame(4);
+	// // await ContractActions.removeGame(5);
 
-	await table.createGame();
+	await table.createGame(10);
 
 	await ContractActions.rmplayer(0);
 	await ContractActions.rmplayer(1);
 	await ContractActions.rmplayer(2);
 	await ContractActions.rmplayer(3);
 	await ContractActions.rmplayer(4);
-	// await ContractActions.rmplayer(5);
-	// await ContractActions.rmplayer(6);
-	// await ContractActions.rmplayer(7);
-	// await ContractActions.rmplayer(8);
+
+	console.log('players removed')
+	// // await ContractActions.rmplayer(5);
+	// // await ContractActions.rmplayer(6);
+	// // await ContractActions.rmplayer(7);
+	// // await ContractActions.rmplayer(8);
 
 
 	await table.seatPlayer(0, player0);
@@ -231,11 +234,15 @@ async function start(table){
 	await table.seatPlayer(2, player2);
 	await table.seatPlayer(3, player3);
 	await table.seatPlayer(4, player4);
+
+	console.log('players seated')
 	
 
 	await table.startGame(0);
+	console.log('game started')
 
 	await table.initialize();
+	console.log('table initialized')
 
 	// console.log("Playing out the hand now");
 
@@ -243,24 +250,27 @@ async function start(table){
 	await table.call(player4);
 	await table.raise(player0, 60);
 	await table.call(player1);
-	await table.fold(player2);
-	await table.fold(player3);
+	//TODO need so save gameID in hand or table.
+	//currently it is hardcoded and passed through function.
+	await table.fold(player2, 0);
+	await table.fold(player3, 0);
 	await table.call(player4);
 
-	// FLOP OPENS
+	// // FLOP OPENS
 
-	function timeout(ms) {
-	    return new Promise(resolve => setTimeout(resolve, ms));
-	}
+	// function timeout(ms) {
+	//     return new Promise(resolve => setTimeout(resolve, ms));
+	// }
 	
-	console.log("Flop has been opened");
+	// // console.log("Flop has been opened");
 
-	await timeout(2000);
+	// await timeout(2000);
 
 	await table.raise(player1, 110);
-	await table.fold(player4);
+	// console.log(data);
+	await table.fold(player4, 0);
 	await table.raise(player0, 390);
-	await table.fold(player1);
+	await table.fold(player1, 0);
 	
 
 	// // await table.initialize();

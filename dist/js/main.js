@@ -140,7 +140,7 @@ function openTurn(card) {
 
 
 // var socket = io.connect('localhost:3000');
-var socket = io.connect('192.168.0.52:3000');
+var socket = io.connect('localhost:3000');
 
 
 socket.on('connect', function () {

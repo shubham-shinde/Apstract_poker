@@ -45,9 +45,9 @@ class Player{
 		await ContractActions.allIn(this.playerID, handID)
 	}
 
-	async fold(handID){
+	async fold(handID, gameId){
 		this.inHand = false;
-		await ContractActions.fold(this.playerID, handID);
+		await ContractActions.fold(this.playerID, handID, gameId);
 	}
 
 	getHoleCards(card1, card2){

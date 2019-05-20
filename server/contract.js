@@ -1,7 +1,13 @@
 import eos from "./eos";
 //TODO : Call functions from smart contracts
+//contract deployed by piyush.
 var ACTOR = 'eospoker1112'
 var KEY = '5KGf9fnZ6auaSuwNqCBT2NARu5T4GSCAyCKbLsGfsUvW4fkV7uM'
+
+//contract deployed by shubham.
+// var ACTOR = 'eospokergame'
+// var KEY = '5HzHemUESLjVts2oh8hYPj2ei9vewYa1Zo4CLfZKkYLJZGtLaE6'
+
 var ContractConnection = {
     EOS_CONTRACT_NAME: ACTOR,
     EOS_HTTP_ENDPOINT: "http://jungle2.cryptolions.io:80",
@@ -147,9 +153,9 @@ export async function allin(playerId, handId){
         return false;
     }
 }
-export async function fold(playerId, handId){
+export async function fold(playerId, handId, gameId){
     try {
-        await eos.makeAction(ACTOR, KEY, 'actionfold', {s: ACTOR, playerId, handId} , ContractConnection)
+        await eos.makeAction(ACTOR, KEY, 'actionfold', {s: ACTOR, playerId, handId, gameId} , ContractConnection)
         return true
     }
     catch(err) {

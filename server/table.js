@@ -151,36 +151,41 @@ class Table{
 		console.log(x)
 	}
 
-	async createGame(){
+	async createGame(smallBlind){
 		if(this.onBlockchain)
-		var x = await contract.creategame(8, 4, 10);
-		console.log(x);
+		var x = await contract.creategame(8, 0, smallBlind);
+		console.log('game created', x);
 	}
 
 	async initialize(){
-		if(!this.onBlockchain) return;
-		var handID = await contract.getCurrentHand();
-		var handData = await contract.getHandData(handID);
-		var playerList = {0 : -1 , 1 : -1 , 2 : -1 , 3 : -1 , 4 : -1 , 5 : -1 , 6 : -1 , 7 : -1 , 8 : -1};
-		var playerData = await contract.getPlayerData();
-		
-		for(var key in playerData){
-			if(playerData.hasOwnProperty(key)){
-				const element = playerData[key];
-				var pd = await this.getDataFromDB(element.playerId);
-				var p = new Player(pd.playerID, pd.email, pd.username, element.currentChips, pd.accountName, pd.pvtKey, pd.index, pd.connection, pd.active, pd.displayPic);
-				playerList[element.playerId] = p;
-				p.seatPlayer(element.playerId);
+		try {
+			if(!this.onBlockchain) return;
+			var handID = await contract.getCurrentHand();
+			var handData = await contract.getHandData(handID);
+			var playerList = {0 : -1 , 1 : -1 , 2 : -1 , 3 : -1 , 4 : -1 , 5 : -1 , 6 : -1 , 7 : -1 , 8 : -1};
+			var playerData = await contract.getPlayerData();
+			
+			for(var key in playerData){
+				if(playerData.hasOwnProperty(key)){
+					const element = playerData[key];
+					var pd = await this.getDataFromDB(element.playerId);
+					var p = new Player(pd.playerID, pd.email, pd.username, element.currentChips, pd.accountName, pd.pvtKey, pd.index, pd.connection, pd.active, pd.displayPic);
+					playerList[element.playerId] = p;
+					p.seatPlayer(element.playerId);
+				}
 			}
-		}
 
-		for (var key in handData.playersInHand){
-			playerList[key].currentBet = handData.playersBetAmount[key];
+			for (var key in handData.playersInHand){
+				playerList[key].currentBet = handData.playersBetAmount[key];
+			}
+			// console.log(playerList);
+			this.currentHand = new Hand(handID, playerList, handData.dealerPosition, this.agent, 10, true);
+			this.currentHand.applyHand(handData);
+			return true;
 		}
-		// console.log(playerList);
-		this.currentHand = new Hand(handID, playerList, handData.dealerPosition, this.agent, 10, true);
-		this.currentHand.applyHand(handData);
-		return true;
+		catch(err) {
+			throw err;
+		}
 	}
 
 	async getDataFromDB(playerID){
@@ -207,13 +212,15 @@ class Table{
 	}
 
 	async raise(player, amount){
-		if(this.onBlockchain)
-		await this.currentHand.raise(player, amount);
+		// console.log("Raising for player" + player.playerID);
+		if(this.onBlockchain){
+			await this.currentHand.raise(player, amount);
+		}
 	}
 
-	async fold(player){
+	async fold(player, gameId){
 		if(this.onBlockchain)
-		await this.currentHand.fold(player);
+		await this.currentHand.fold(player, gameId);
 	}
 }
 

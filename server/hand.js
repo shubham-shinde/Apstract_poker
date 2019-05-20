@@ -174,8 +174,10 @@ class Hand{
 	async raise(player, amount){
 		//update min raise
 		// if(this.playerIndex != player.seat) return;
-		if(amount < this.minRaise) return;
+		// if(amount < this.minRaise) return;
 		
+		// console.log("HERE");
+
 		if(this.onBlockchain)
 		await player.raise(amount, this.hand_id);
 
@@ -207,11 +209,11 @@ class Hand{
 		// player_list.push(player);
 	}
 
-	async fold(player){
+	async fold(player, gameId){
 		// if(this.playerIndex != player.seat) return;
 		// console.log("Here");
 		if(this.onBlockchain){
-			await player.fold(this.hand_id);
+			await player.fold(this.hand_id, gameId);
 		}
 		// console.log("Folding for player " + player.username);
 		this.agent.emit('fold', {seatID : player.seat});
